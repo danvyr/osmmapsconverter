@@ -1,0 +1,9 @@
+omim*
+OsmAndMapCreator/*
+lib/
+fonts/
+batch.*
+inspector.*
+logging.properties
+OsmAndMapCreator*
+utilities.*
