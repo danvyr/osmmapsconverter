@@ -17,7 +17,9 @@ RUN cd /mapsme/omim/tools/python/maps_generator && pip3 install -r requirements.
 #RUN cp map_generator.ini /mapsme/tools/python/maps_generator/var/etc/map_generator.ini
 
 #CMD cd /mapsme/tools/python/maps_generator &&  python3.6 -m maps_generator --countries="Belarus"
-
+#
+#cd omim/tools/python
+#python$ python3.6 -m maps_generator -h
 
 
 #https://github.com/mapsme/omim/tree/master/tools/python/maps_generator
