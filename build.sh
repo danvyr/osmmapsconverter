@@ -23,3 +23,6 @@ wget http://download.osmand.net/latest-night-build/OsmAndMapCreator-main.zip
 unzip OsmAndMapCreator-main.zip -d $CURRENT_DIR/osmand/OsmAndMapCreator/
 
 #sudo docker build . -t osmand-crtr
+
+
+#
