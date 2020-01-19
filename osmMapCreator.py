@@ -8,10 +8,12 @@
 #TODO текстовый гуи интерфейс для 
 #TODO 
 
-
+import sys
 import requests
+import urllib.request
 
 
+in_dir = 'in'
 urls = {
     'osmandcreator': 'https://download.osmand.net/latest-night-build/OsmAndMapCreator-main.zip',
     'maps': 
@@ -20,8 +22,42 @@ urls = {
         }
 }
 
-resp = requests.head(urls['maps']['belarus'])
 
-print("Server: " + resp.headers['server'])
-print("Last modified: " + resp.headers['last-modified'])
-print("Content type: " + resp.headers['content-type'])
+
+def osmand():
+    pass
+
+def mapsme():
+    pass
+
+def split():
+    return 1
+
+def download():
+    for map_name, url_to_map in urls['maps']:
+        resp = requests.head(url_to_map)        
+        print("Last modified: " + resp.headers['last-modified'])
+
+
+        urllib.request.urlretrieve(url_to_map, in_dir + map_name)
+        return 1
+
+
+def main():
+    if download():
+        mapsme()
+        if split():
+            osmand()
+        
+
+
+
+
+
+    
+
+
+if __name__ == '__main__':
+    main()
+
+
