@@ -7,6 +7,7 @@
 #TODO сделать запуск в докере
 #TODO выбор какие карты и чем собирать с какими стилями и как резать.
 #TODO текстовый гуи интерфейс для 
+#TODO генерация json для приложения загрузки на android 
 #TODO сделать тестовую замену name на name:be
 
 import sys
@@ -42,6 +43,7 @@ def checkVerstion():
     except:
         with open(currentMap, 'w') as cf:
             cf.write(version)
+        
     return 1
     
 
@@ -75,14 +77,36 @@ def split():
         return 1
     except OSError as err:
         print("OS error: {0}".format(err))
+        return 0
     except ValueError:
         print("Could not convert data to an integer.")
+        return 0
     except:
         print("Unexpected error:", sys.exc_info()[0])
+        return 0
 
 def osmand():
-    pass
+    try:
+        for mapFile in os.listdir(splitDir):
+            print(mapFile)
+            #cd to osmAndMapCreator
+            # $DIR ?
+            cmd = 'java -Djava.util.logging.config.file="$DIR/logging.properties" \
+                -Xms128M -Xmx3000M \
+                -cp "$DIR/OsmAndMapCreator.jar:$DIR/lib/*.jar" net.osmand.MainUtilities generate-obf' + mapFile
+            os.system(cmd)
 
+        return 1
+    except OSError as err:
+        print("OS error: {0}".format(err))
+        return 0
+    except ValueError:
+        print("Could not convert data to an integer.")
+        return 0
+    except:
+        print("Unexpected error:", sys.exc_info()[0])
+        return 0
+    
 def mapsme():
     pass
 
