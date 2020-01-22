@@ -106,3 +106,4 @@ venv.bak/
 
 #osm files
 *.pbf
+*.obf
