@@ -89,7 +89,7 @@ def prepare():
         print("Last modified: " + resp.headers['last-modified'])
         pathToFile = osmandDir + '/' + 'OsmAndMapCreator-main.zip'
         urllib.request.urlretrieve(url,  pathToFile)
-        os.system('unzip'+  pathToFile + ' -d ' + OAMCDir )
+        os.system('unzip '+  pathToFile + ' -d ' + OAMCDir )
     except:
         pass
 
