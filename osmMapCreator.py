@@ -108,19 +108,48 @@ def move():
     #check files in out folders and backup
 
     #move OsmAnd
+    print ('move OsmAND map')
     for file in osmandDir:
         if file.endswith('.obf'):
             shutil.move(os.path.join(osmandDir, file), os.path.join(outOsmAnd, file))
 
     #move mapsme
-    for file in mapsmeDir:
-        if file.endswith('.mwn'):
-            shutil.move(os.path.join(osmandDir, file),
+    outMapsme = mapsmeDir + 'out'
+    path = ''
+    status = False
+    for folder in outMapsme:
+        try:
+            folders = os.listdir()
+           
+            for t in folders:
+                if t.finf('20'):
+                    folder 
+            os.chdir(outMapsme + folder)
+            with open('status/stages.status','r') as f:
+                str = f.readline()
+                if str == 'finish':
+                    status = True
+                    path =  outMapsme + folder
+                    print (path)
+            os.chdir(outMapsme)
+        except:
+            pass
+
+    print ('move mapsme map')
+    if status:
+        for file in mapsmeDir:
+            if file.endswith('.mwn'):
+                shutil.move(os.path.join(osmandDir, file),
                         os.path.join(outMapsme, file))
+    os.chdir(currentDir)
 
     #move garmin
-    shutil.move(os.path.join(garminDir, 'gmapsupp.img'),
+    print ('move garmin map')
+    try:
+        shutil.move(os.path.join(garminDir+'/temp', 'gmapsupp.img'),
                 os.path.join(outGarmin, 'gmapsupp.img'))
+    except:
+         print ('no garmin map')
 
 def download():
     print ('Start downloading maps')
@@ -203,14 +232,14 @@ def garmin():
 
 
 def main():
-    if download():
-        mapsme()
-        if split():
-            osmand()
-        garmin()
+#    if download():
+#        mapsme()
+#        if split():
+#            osmand()
+#        garmin()
 
-        move()
-        clean()
+    move()
+    clean()
 
 if __name__ == '__main__':
     main()
