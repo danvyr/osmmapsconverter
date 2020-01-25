@@ -85,7 +85,7 @@ def prepare():
     #prepare OSMAND
     try:
         url = urls['osmandcreator']
-        resp = requests.head(url)        
+        resp = requests.head(url)
         print("Last modified: " + resp.headers['last-modified'])
         pathToFile = osmandDir + '/' + 'OsmAndMapCreator-main.zip'
         urllib.request.urlretrieve(url,  pathToFile)
@@ -157,6 +157,7 @@ def osmand():
             cmd = 'java -Djava.util.logging.config.file="'+OAMCDir+'/logging.properties" \
                 -Xms128M -Xmx3000M \
                 -cp "'+OAMCDir+'/OsmAndMapCreator.jar:'+OAMCDir+'/lib/*.jar" net.osmand.MainUtilities generate-obf ' + mapFile
+            print(cmd)
             os.system(cmd)
             
         os.chdir(currentDir)
@@ -178,15 +179,15 @@ def mapsme():
 
 
 def main():
-    #if download():
+    if download():
     #     mapsme()
-    #     if split():
-    #         osmand()
-        
+        if split():
+            osmand()
+     
     #split()
     #osmand()
     # mapsme()
-    prepare()
+#    prepare()
 
 if __name__ == '__main__':
     main()

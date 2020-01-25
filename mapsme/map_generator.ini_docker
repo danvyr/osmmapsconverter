@@ -1,22 +1,22 @@
 [Main]
-MAIN_OUT_PATH: ~/dev/osmmapsconverter/mapsme/out
+MAIN_OUT_PATH: /mapsme/omim
 DEBUG: 0
 
 
 [Developer]
-BUILD_PATH: ~/dev/osmmapsconverter/mapsme/omim-build-release
-OMIM_PATH: ~/dev/osmmapsconverter/mapsme/omim
+BUILD_PATH: /mapsme/omim-build-release
+OMIM_PATH: /mapsme/omim
 
 
 [Generator tool]
-USER_RESOURCE_PATH: ~/dev/osmmapsconverter/mapsme/omim/data
+USER_RESOURCE_PATH: /mapsme/omim/data
 # auto detection
 # NODE_STORAGE: map
 
 
 [Osm tools]
 OSM_TOOLS_SRC_PATH: ${Developer:OMIM_PATH}/tools/osmctools
-OSM_TOOLS_PATH: ~/dev/osmmapsconverter/mapsme/omim/tools/osmctools
+OSM_TOOLS_PATH: /mapsme/omim/tools/osmctools
 
 
 [Logging]
@@ -25,8 +25,8 @@ OSM_TOOLS_PATH: ~/dev/osmmapsconverter/mapsme/omim/tools/osmctools
 
 [External]
 # PLANET_URL:
-PLANET_MD5_URL: http://download.geofabrik.de/europe/belarus-latest.osm.pbf.md5
-PLANET_URL: http://download.geofabrik.de/europe/belarus-latest.osm.pbf
+#PLANET_MD5_URL: http://download.geofabrik.de/europe/belarus-latest.osm.pbf.md5
+#PLANET_URL: http://download.geofabrik.de/europe/belarus-latest.osm.pbf
 # PLANET_COASTS_URL:
 SUBWAY_URL: http://osm-subway.maps.me/mapsme/latest.json
 # UGC_URL:
