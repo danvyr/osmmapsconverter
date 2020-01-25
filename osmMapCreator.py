@@ -190,7 +190,7 @@ def osmand():
         return 0
     
 def mapsme():
-    os.chdir(osmandDir + '/omim/tools/python')
+    os.chdir(mapsmeDir + '/omim/tools/python')
     os.system(
         'python3.6 -m maps_generator --countries="Belarus*" --skip="coastline"')
     os.chdir(currentDir)
