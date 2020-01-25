@@ -40,7 +40,9 @@ mapsmeDir = os.path.abspath('mapsme')
 osmandDir = os.path.abspath('osmand')
 OAMCDir  = osmandDir + '/OsmAndMapCreator'
 
-outDir = os.path.abspath('out')
+garminDir = os.path.abspath('garmin')
+
+outDir = os.path.abspath('/var/www/maps')
 outOsmAnd = outDir + '/osmand'
 outMapsme = outDir + '/mapsme'
 outGarmin = outDir + '/garmin'
@@ -62,11 +64,14 @@ def checkVerstion():
 def prepare():
     #install
     try:
+        print('install osmctools')
         os.system('sudo apt-get install osmctools')
     except:
         pass
 
     try:
+        print('install mapsme')
+
         os.system('sudo apt-get install git qtbase5-dev cmake libsqlite3-dev clang libc++-dev libboost-iostreams-dev libglu1-mesa-dev python3-pip -y')
         os.chdir(mapsmeDir)
         os.system('git clone --depth=1 --recursive https://github.com/mapsme/omim.git')
@@ -84,6 +89,8 @@ def prepare():
 
     #prepare OSMAND
     try:
+        print('install osmand')
+
         url = urls['osmandcreator']
         resp = requests.head(url)
         print("Last modified: " + resp.headers['last-modified'])
@@ -100,11 +107,20 @@ def move():
 
     #check files in out folders and backup
 
-    #move Osm
-
+    #move OsmAnd
     for file in osmandDir:
         if file.endswith('.obf'):
             shutil.move(os.path.join(osmandDir, file), os.path.join(outOsmAnd, file))
+
+    #move mapsme
+    for file in mapsmeDir:
+        if file.endswith('.mwn'):
+            shutil.move(os.path.join(osmandDir, file),
+                        os.path.join(outMapsme, file))
+
+    #move garmin
+    shutil.move(os.path.join(garminDir, 'gmapsupp.img'),
+                os.path.join(outGarmin, 'gmapsupp.img'))
 
 def download():
     print ('Start downloading maps')
@@ -174,20 +190,27 @@ def osmand():
         return 0
     
 def mapsme():
-    pass
+    os.chdir(osmandDir + '/omim/tools/python')
+    os.system(
+        'python3.6 -m maps_generator --countries="Belarus*" --skip="coastline"')
+    os.chdir(currentDir)
+
+def garmin():
+    os.chdir(garminDir)
+    os.system('bash build.sh')
+    os.chdir(currentDir)
 
 
 
 def main():
     if download():
-    #     mapsme()
+        mapsme()
         if split():
             osmand()
-     
-    #split()
-    #osmand()
-    # mapsme()
-#    prepare()
+        garmin()
+
+        move()
+        clean()
 
 if __name__ == '__main__':
     main()
