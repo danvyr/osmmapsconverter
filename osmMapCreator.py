@@ -42,11 +42,13 @@ OAMCDir  = osmandDir + '/OsmAndMapCreator'
 
 garminDir = os.path.abspath('garmin')
 
+tempGarmin = os.path.abspath('garmin/temp')
+tempMapsme = os.path.abspath('mapsme/out')
+
 outDir = os.path.abspath('/var/www/maps')
 outOsmAnd = outDir + '/osmand'
 outMapsme = outDir + '/mapsme'
 outGarmin = outDir + '/garmin'
-
 
 
 def checkVerstion():
@@ -58,7 +60,7 @@ def checkVerstion():
     except:
         with open(currentMap, 'w') as cf:
             cf.write(version)
-        
+
     return 1
 
 def prepare():
@@ -101,7 +103,18 @@ def prepare():
         pass
 
 def clean():
-    pass
+    print ([inputDir, tempMapsme, tempGarmin])
+    for folder in [inputDir, tempMapsme, tempGarmin]:
+        print(folder)
+        for filename in os.listdir(folder):
+            file_path = os.path.join(folder, filename)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+            except Exception as e:
+                print('Failed to delete %s. Reason: %s' % (file_path, e))
 
 def move():
 
@@ -109,39 +122,46 @@ def move():
 
     #move OsmAnd
     print ('move OsmAND map')
-    for file in osmandDir:
+    for file in os.listdir(osmandDir):
         if file.endswith('.obf'):
+            print(file)
             shutil.move(os.path.join(osmandDir, file), os.path.join(outOsmAnd, file))
 
     #move mapsme
-    outMapsme = mapsmeDir + 'out'
+    tmpMapsme = mapsmeDir + '/out'
     path = ''
     status = False
-    for folder in outMapsme:
-        try:
-            folders = os.listdir()
-           
-            for t in folders:
-                if t.finf('20'):
-                    folder 
-            os.chdir(outMapsme + folder)
-            with open('status/stages.status','r') as f:
-                str = f.readline()
-                if str == 'finish':
-                    status = True
-                    path =  outMapsme + folder
-                    print (path)
+    for folder in os.listdir(tmpMapsme):
+#        print (folder)
+        if ( folder.find('20') > -1) and os.path.isdir(tmpMapsme + '/' + folder):
+            d = tmpMapsme + '/' + folder
+            print( folder)
+            for t in os.listdir(d):
+                g = d + '/' + t
+                if (t.find('20') > -1) and os.path.isdir(g):
+                    os.chdir(g)
+                    with open(d+'/status/stages.status','r') as f:
+                        str = f.readline()
+                        print (str)
+                        if str == 'finish':
+                             status = True
+                             path =  g
+                             print (path)
             os.chdir(outMapsme)
-        except:
-            pass
+#        except:
+#            pass
 
-    print ('move mapsme map')
+    print ('move mapsme map' ) 
     if status:
-        for file in mapsmeDir:
-            if file.endswith('.mwn'):
-                shutil.move(os.path.join(osmandDir, file),
+        for file in os.listdir(path):
+            if file.endswith('.mwm'):
+                print(file)
+                shutil.move(os.path.join(path, file),
                         os.path.join(outMapsme, file))
     os.chdir(currentDir)
+
+    
+
 
     #move garmin
     print ('move garmin map')
@@ -232,8 +252,8 @@ def garmin():
 
 
 def main():
+#    mapsme()
 #    if download():
-#        mapsme()
 #        if split():
 #            osmand()
 #        garmin()
