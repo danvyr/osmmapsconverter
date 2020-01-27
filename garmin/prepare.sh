@@ -1,24 +1,25 @@
 #!/bin/sh
 
 #prepare
-wget http://www.mkgmap.org.uk/download/mkgmap-r4425.tar.gz
+MKGMAP_VER=r4431
+SPLITTER_VER=r595
 
-mkdir mkgmap
-tar -xf mkgmap-r4425.tar.gz --directory mkgmap
-mv mkgmap/mkgmap-r4425/* mkgmap
-rmdir mkgmap/mkgmap-r4425
-rm mkgmap-r4425.tar.gz
+wget http://www.mkgmap.org.uk/download/mkgmap-$MKGMAP_VER.tar.gz
 
-#rmdir split
+mkdir mkgmap split temp
 
-mkdir split temp
+tar -xf mkgmap-$MKGMAP_VER.tar.gz --directory mkgmap
+mv mkgmap/mkgmap-$MKGMAP_VER/* mkgmap
+rmdir mkgmap/mkgmap-$MKGMAP_VER
+rm mkgmap-$MKGMAP_VER.tar.gz
+
 
 wget http://www.mkgmap.org.uk/download/splitter-r595.tar.gz
 
-tar -xf splitter-r595.tar.gz  --directory  split
-mv split/splitter-r595/* split
-rmdir split/splitter-r595
-rm splitter-r595.tar.gz
+tar -xf splitter-$SPLITTER_VER.tar.gz  --directory  split
+mv split/splitter-$SPLITTER_VER/* split
+rmdir split/splitter-$SPLITTER_VER
+rm splitter-$SPLITTER_VER.tar.gz
 
 
 
