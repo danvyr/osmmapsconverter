@@ -1,8 +1,8 @@
 #!/bin/sh
 
 #prepare
-MKGMAP_VER=r4431
-SPLITTER_VER=r595
+MKGMAP_VER=latest
+SPLITTER_VER=latest
 
 wget http://www.mkgmap.org.uk/download/mkgmap-$MKGMAP_VER.tar.gz
 
@@ -14,7 +14,7 @@ rmdir mkgmap/mkgmap-$MKGMAP_VER
 rm mkgmap-$MKGMAP_VER.tar.gz
 
 
-wget http://www.mkgmap.org.uk/download/splitter-r595.tar.gz
+wget http://www.mkgmap.org.uk/download/splitter-$SPLITTER_VER.tar.gz
 
 tar -xf splitter-$SPLITTER_VER.tar.gz  --directory  split
 mv split/splitter-$SPLITTER_VER/* split
