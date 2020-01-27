@@ -252,12 +252,11 @@ def garmin():
 
 
 def main():
-#    mapsme()
-#    if download():
-#        if split():
-#            osmand()
-#        garmin()
-
+    if download():
+        if split():
+            osmand()
+        garmin()
+    mapsme()
     move()
     clean()
 
