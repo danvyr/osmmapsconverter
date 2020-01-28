@@ -224,8 +224,10 @@ def split():
             print(mapFile)
             for polyFile in os.listdir(polyDir):
                 print(polyFile)
-                cmd = 'osmconvert ' + os.path.join(inputDir, mapFile) + ' -B=' + os.path.join(
-                    polyDir, polyFile) + ' --complete-ways --complex-ways -o=' + os.path.join(splitDir, polyFile.replace('poly', 'pbf')) + ' --statistics'
+                cmd = 'osmconvert ' + os.path.join(inputDir, mapFile) + ' -B=' + '"' + os.path.join(polyDir, polyFile) +'"' \
+                + ' --complete-ways --complex-ways -o='  \
+                + '"' + os.path.join(splitDir, polyFile.replace('poly', 'pbf')) + '"'   \
+                + ' --statistics'
                 print(cmd)
                 os.system(cmd)
         return 1
@@ -250,7 +252,8 @@ def osmand():
 
             cmd = 'java -Djava.util.logging.config.file="'+OAMCDir+'/logging.properties" \
                 -Xms128M -Xmx3000M \
-                -cp "'+OAMCDir+'/OsmAndMapCreator.jar:'+OAMCDir+'/lib/*.jar" net.osmand.MainUtilities generate-obf ' + mapFile
+                -cp "'+OAMCDir+'/OsmAndMapCreator.jar:'+OAMCDir+'/lib/*.jar" net.osmand.MainUtilities generate-obf ' \
+                + '"' + mapFile + '"'
             print(cmd)
             os.system(cmd)
 
@@ -282,6 +285,7 @@ def garmin():
 
 
 def main():
+ #   prepare():
     if download():
         if split():
             osmand()
