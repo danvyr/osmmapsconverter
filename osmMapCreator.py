@@ -4,12 +4,17 @@
 # TODO выбор какие карты и чем собирать с какими стилями и как резать.
 # TODO генерация json для приложения загрузки на android
 # TODO сделать тестовую замену name на name:be
+# TODO сделать 
+# TODO формировать json с датой и размещением файлов
+# TODO общий in с датой скачивания
 
 import sys
 import requests
 import urllib.request
 import os
 import shutil
+import datetime
+import email.utils as eut
 
 
 urls = {
@@ -38,6 +43,7 @@ OAMCDir = osmandDir + '/OsmAndMapCreator'
 
 tempGarmin = garminDir + '/temp'
 tempMapsme = mapsmeDir + '/temp'
+# in  mapsme/omim/tools/python/maps_generator/var/etc/map_generator.ini MAIN_OUT_PATH: <full_path>/mapsme/temp
 
 outDir = os.path.abspath('/var/www/maps')
 outOsmAnd = outDir + '/osmand'
@@ -51,18 +57,25 @@ innerDirs = [polyDir, splitDir, mapsmeDir, osmandDir,
 outDirs = [outDir, outOsmAnd, outMapsme, outGarmin]
 
 
-def checkVerstion():
+def checkVersion(urlDate):
     # наверное не надо
-    version = ''
+    version = ""
     try:
-        with open(currentMap, 'r') as cf:
-            version = cf.readline()
+        with open(currentMap, 'r') as vf:
+            version = vf.readline()
+            if version != urlDate:
+                return 1
+            else:
+                return 0
     except:
-        with open(currentMap, 'w') as cf:
-            cf.write(version)
+        pass
 
-    return 1
-
+def writeVersion(urlDate):
+    try:
+        with open(currentMap, 'w') as vf:
+            vf.write(urlDate)
+    except:
+        pass        
 
 def checkDirs():
     for folder in innerDirs:
@@ -71,7 +84,7 @@ def checkDirs():
                 os.mkdir(folder)
             except:
                 os.system('sudo mkdir -p ' + folder)
-                os.system('sudo chown ' + user + ':' + user + ' ' + folder ) 
+                os.system('sudo chown ' + user + ':' + user + ' ' + folder)
 
     for folder in outDirs:
         if not os.path.isdir(folder):
@@ -79,8 +92,7 @@ def checkDirs():
                 os.mkdir(folder)
             except:
                 os.system('sudo mkdir -p ' + folder)
-                os.system('sudo chown ' + user + ':' + user + ' ' + folder ) 
-
+                os.system('sudo chown ' + user + ':' + user + ' ' + folder)
 
 
 def prepare():
@@ -98,13 +110,15 @@ def prepare():
 
         os.system('sudo apt-get install git qtbase5-dev cmake libsqlite3-dev clang libc++-dev libboost-iostreams-dev libglu1-mesa-dev python3-pip -y')
         os.chdir(mapsmeDir)
-        os.system('git clone --depth=1 --recursive https://github.com/mapsme/omim.git')
+        os.system(
+            'git clone --depth=1 --recursive https://github.com/mapsme/omim.git')
         os.chdir(mapsmeDir + '/omim')
         os.system('./configure.sh')
         os.system('./tools/unix/build_omim.sh -sr generator_tool')
         os.chdir('tools/python/maps_generator')
         os.system('pip3 install -r requirements.txt')
-        os.system('cp ' + os.path.join(mapsmeDir,'/map_generator.ini') + ' var/etc/map_generator.ini')
+        os.system('cp ' + os.path.join(mapsmeDir,
+                                       '/map_generator.ini') + ' var/etc/map_generator.ini')
         os.chdir(currentDir)
 
     except:
@@ -162,21 +176,21 @@ def move():
     path = ''
     status = False
     for folder in os.listdir(tempMapsme):
-        dirL1 = os.path.join(tempMapsme , folder)        
-        if (folder.find('20') > -1) and os.path.isdir(dirL1):            
+        dirL1 = os.path.join(tempMapsme, folder)
+        if (folder.find('20') > -1) and os.path.isdir(dirL1):
             print(dirL1)
             for t in os.listdir(dirL1):
                 dirL2 = os.path.join(dirL1, t)
                 if (t.find('20') > -1) and os.path.isdir(dirL2):
                     os.chdir(dirL2)
-                    with open(os.path.join( dirL1, 'status/stages.status'), 'r') as f:
+                    with open(os.path.join(dirL1, 'status/stages.status'), 'r') as f:
                         str = f.readline()
                         print(str)
                         if str == 'finish':
                             status = True
                             path = dirL2
                             print(path)
-            os.chdir(outMapsme)
+            os.chdir(tempMapsme)
 
     # moving mapsme out
     print('move mapsme map')
@@ -191,7 +205,7 @@ def move():
     # move garmin
     print('move garmin map')
     try:
-        shutil.move(os.path.join(garminDir, 'temp', 'gmapsupp.img'),
+        shutil.move(os.path.join(tempGarmin, 'gmapsupp.img'),
                     os.path.join(outGarmin, 'gmapsupp.img'))
     except:
         print('no garmin map')
@@ -205,15 +219,23 @@ def download():
         for map_name, url_to_map in urls['maps'].items():
             print(map_name)
             resp = requests.head(url_to_map)
-            print("Last modified: " + resp.headers['last-modified'])
-            # pathToFile = os.path.join(inputDir,  map_name + '.osm.pbf')   # не работает
+            urlTime = resp.headers['last-modified']
+            print(urlTime)
+            # url_date = parsedate(url_time)
+            urlRawDate = eut.parsedate(urlTime)
+            urlDate  = datetime.datetime(*urlRawDate[:6])
+            
+            #print("Last modified: " + urlDate) 
             pathToFile = os.path.join(inputDir, map_name + '.osm.pbf')
             print(pathToFile)
-            urllib.request.urlretrieve(url_to_map,  pathToFile)
+            #urllib.request.urlretrieve(url_to_map,  pathToFile)
             print('all downloaded')
-        return 1
+        return urlDate
 
     except:
+        print('downloading failed')
+        print("Unexpected error:", sys.exc_info()[0])
+
         return 0
 
 
@@ -224,10 +246,10 @@ def split():
             print(mapFile)
             for polyFile in os.listdir(polyDir):
                 print(polyFile)
-                cmd = 'osmconvert ' + os.path.join(inputDir, mapFile) + ' -B=' + '"' + os.path.join(polyDir, polyFile) +'"' \
-                + ' --complete-ways --complex-ways -o='  \
-                + '"' + os.path.join(splitDir, polyFile.replace('poly', 'pbf')) + '"'   \
-                + ' --statistics'
+                cmd = 'osmconvert ' + os.path.join(inputDir, mapFile) + ' -B=' + '"' + os.path.join(polyDir, polyFile) + '"' \
+                    + ' --complete-ways --complex-ways -o='  \
+                    + '"' + os.path.join(splitDir, polyFile.replace('poly', 'pbf')) + '"'   \
+                    + ' --statistics'
                 print(cmd)
                 os.system(cmd)
         return 1
@@ -272,7 +294,7 @@ def osmand():
 
 
 def mapsme():
-    os.chdir(os.path.join(mapsmeDir, 'omim/tools/python')) 
+    os.chdir(os.path.join(mapsmeDir, 'omim/tools/python'))
     os.system(
         'python3.6 -m maps_generator --countries="Belarus*" --skip="coastline"')
     os.chdir(currentDir)
@@ -286,11 +308,15 @@ def garmin():
 
 def main():
  #   prepare():
-    if download():
-        if split():
-            osmand()
-        garmin()
-    mapsme()
+    dl = download().strftime("%m/%d/%Y, %H:%M:%S")
+
+    if dl:
+        if checkVersion(dl):
+            if split():
+                osmand()
+            garmin()
+            mapsme()
+            writeVersion(dl)
     move()
     clean()
 
