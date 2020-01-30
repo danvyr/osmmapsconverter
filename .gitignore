@@ -112,3 +112,4 @@ garmin/split/
 garmin/temp/
 mapsme/out/
 .vscode
+currentMap.txt

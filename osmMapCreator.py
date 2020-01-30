@@ -152,7 +152,7 @@ def clean():
         for filename in os.listdir(folder):
             file_path = os.path.join(folder, filename)
             try:
-                if os.path.isfile(file_path) or os.path.islink(file_path):
+                if (os.path.isfile(file_path) or os.path.islink(file_path)) and filename != '.gitignore':
                     os.unlink(file_path)
                 elif os.path.isdir(file_path):
                     shutil.rmtree(file_path)
@@ -219,7 +219,7 @@ def move():
     moveCount = garminCount + mapsmeCount + osmandCount
     if moveCount > 12:
         return 1
-    if moveCount > 6
+    if moveCount > 6:
         print ('Something Wrong')
         return 1
     else:
@@ -242,7 +242,7 @@ def download():
             if(urllib.request.urlretrieve(url_to_map,  pathToFile)):
                print('all downloaded')
                return urlDate
-           else:
+            else:
                return 0
 
     except:
@@ -329,7 +329,7 @@ def main():
                 osmand()
             garmin()
             mapsme()
-            if(move())
+            if(move()):
                 writeVersion(dl)
     clean()
 
