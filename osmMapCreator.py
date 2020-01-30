@@ -28,7 +28,7 @@ urls = {
 user = 'osm'
 currentDir = os.path.abspath('.')
 
-currentMap = 'currentMap.txt'
+currentMap = os.path.join(currentDir, 'currentMap.txt')
 
 inputDir = os.path.abspath('in')
 
@@ -63,19 +63,20 @@ def checkVersion(urlDate):
     try:
         with open(currentMap, 'r') as vf:
             version = vf.readline()
-            if version != urlDate:
+            if version != urlDate: 
                 return 1
             else:
                 return 0
     except:
-        pass
+        print ('first launch')
+        return 1
 
 def writeVersion(urlDate):
     try:
         with open(currentMap, 'w') as vf:
             vf.write(urlDate)
     except:
-        pass        
+        print('can\'t write version file')
 
 def checkDirs():
     for folder in innerDirs:
@@ -161,6 +162,10 @@ def clean():
 
 def move():
 
+    moveCount = 0
+    osmandCount = 0
+    mapsmeCount = 0
+    garminCount = 0
     # check files in out folders and backup
 
     # move OsmAnd
@@ -170,7 +175,7 @@ def move():
             print(file)
             shutil.move(os.path.join(osmandDir, file),
                         os.path.join(outOsmAnd, file))
-
+            osmandCount = osmandCount + 1
     # move mapsme
     # find mapme out
     path = ''
@@ -200,6 +205,7 @@ def move():
                 print(file)
                 shutil.move(os.path.join(path, file),
                             os.path.join(outMapsme, file))
+                mapsmeCount = mapsmeCount + 1
     os.chdir(currentDir)
 
     # move garmin
@@ -207,9 +213,17 @@ def move():
     try:
         shutil.move(os.path.join(tempGarmin, 'gmapsupp.img'),
                     os.path.join(outGarmin, 'gmapsupp.img'))
+        garminCount = garminCount + 1
     except:
         print('no garmin map')
-
+    moveCount = garminCount + mapsmeCount + osmandCount
+    if moveCount > 12:
+        return 1
+    if moveCount > 6
+        print ('Something Wrong')
+        return 1
+    else:
+        return 0
 
 def download():
 
@@ -220,17 +234,16 @@ def download():
             print(map_name)
             resp = requests.head(url_to_map)
             urlTime = resp.headers['last-modified']
-            print(urlTime)
-            # url_date = parsedate(url_time)
             urlRawDate = eut.parsedate(urlTime)
             urlDate  = datetime.datetime(*urlRawDate[:6])
-            
-            #print("Last modified: " + urlDate) 
+            print("Last modified: " + urlDate)
             pathToFile = os.path.join(inputDir, map_name + '.osm.pbf')
             print(pathToFile)
-            #urllib.request.urlretrieve(url_to_map,  pathToFile)
-            print('all downloaded')
-        return urlDate
+            if(urllib.request.urlretrieve(url_to_map,  pathToFile)):
+               print('all downloaded')
+               return urlDate
+           else:
+               return 0
 
     except:
         print('downloading failed')
@@ -316,8 +329,8 @@ def main():
                 osmand()
             garmin()
             mapsme()
-            writeVersion(dl)
-    move()
+            if(move())
+                writeVersion(dl)
     clean()
 
 
