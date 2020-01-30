@@ -166,9 +166,9 @@ def move():
     osmandCount = 0
     mapsmeCount = 0
     garminCount = 0
-    # check files in out folders and backup
+    # check files in temp folders and backup
 
-    # move OsmAnd
+    # move OsmAnd maps
     print('move OsmAND map')
     for file in os.listdir(osmandDir):
         if file.endswith('.obf'):
@@ -177,7 +177,7 @@ def move():
                         os.path.join(outOsmAnd, file))
             osmandCount = osmandCount + 1
     # move mapsme
-    # find mapme out
+    # find mapme maps
     path = ''
     status = False
     for folder in os.listdir(tempMapsme):
@@ -197,7 +197,7 @@ def move():
                             print(path)
             os.chdir(tempMapsme)
 
-    # moving mapsme out
+    # moving mapsme maps
     print('move mapsme map')
     if status:
         for file in os.listdir(path):
@@ -216,10 +216,12 @@ def move():
         garminCount = garminCount + 1
     except:
         print('no garmin map')
+
+    #calculate how maps was moved 
     moveCount = garminCount + mapsmeCount + osmandCount
     if moveCount > 12:
         return 1
-    if moveCount > 6:
+    elif moveCount > 6:
         print ('Something Wrong')
         return 1
     else:
@@ -321,6 +323,7 @@ def garmin():
 
 def main():
  #   prepare():
+    checkDirs()
     dl = download().strftime("%m/%d/%Y, %H:%M:%S")
 
     if dl:
