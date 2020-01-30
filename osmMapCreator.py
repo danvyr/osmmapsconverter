@@ -324,7 +324,7 @@ def garmin():
 def main():
  #   prepare():
     checkDirs()
-    dl = download().strftime("%m/%d/%Y, %H:%M:%S")
+    dl = download().isoformat() #  .strftime("%m/%d/%Y, %H:%M:%S")
 
     if dl:
         if checkVersion(dl):
