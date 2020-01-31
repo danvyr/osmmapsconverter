@@ -145,7 +145,7 @@ def prepare():
 
 
 def clean():
-
+    print ('Clean folders:')
     print(tempDirs)
     for folder in tempDirs:
         print(folder)
@@ -235,15 +235,17 @@ def download():
         for map_name, url_to_map in urls['maps'].items():
             print(map_name)
             resp = requests.head(url_to_map)
-            urlTime = resp.headers['last-modified']
-            urlRawDate = eut.parsedate(urlTime)
-            urlDate  = datetime.datetime(*urlRawDate[:6])
-            print("Last modified: " + urlDate)
+            urlLastModified = resp.headers['last-modified']
+            print (urlLastModified)
+            urlRawDate = eut.parsedate(urlLastModified)
+            print(urlRawDate)
+            urlDate  =  datetime.datetime(*urlRawDate[:6])
+            print("Last modified: " + str(urlDate))
             pathToFile = os.path.join(inputDir, map_name + '.osm.pbf')
             print(pathToFile)
-            if(urllib.request.urlretrieve(url_to_map,  pathToFile)):
-               print('all downloaded')
-               return urlDate
+            if urllib.request.urlretrieve(url_to_map,  pathToFile):
+                print('all downloaded')
+                return str(urlDate.isoformat)
             else:
                return 0
 
@@ -324,10 +326,11 @@ def garmin():
 def main():
  #   prepare():
     checkDirs()
-    dl = download().isoformat() #  .strftime("%m/%d/%Y, %H:%M:%S")
+    dl = download()
 
     if dl:
         if checkVersion(dl):
+            print ('start')
             if split():
                 osmand()
             garmin()
