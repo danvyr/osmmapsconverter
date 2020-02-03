@@ -55,7 +55,7 @@ outGarmin = outDir + '/garmin'
 tempDirs = [inputDir, tempMapsme, tempGarmin, tempSplit]
 
 innerDirs = [polyDir, splitDir, mapsmeDir, osmandDir,
-             garminDir, OAMCDir, tempGarmin, tempMapsme]
+             garminDir, OAMCDir]
 outDirs = [outDir, outOsmAnd, outMapsme, outGarmin]
 
 
