@@ -41,8 +41,10 @@ garminDir = os.path.abspath('garmin')
 
 OAMCDir = osmandDir + '/OsmAndMapCreator'
 
-tempGarmin = garminDir + '/temp'
-tempMapsme = mapsmeDir + '/temp'
+tempGarmin = os.path.join(garminDir, 'temp')
+tempMapsme = os.path.join(mapsmeDir, 'temp')
+tempSplit = os.path.join(currentDir, 'split')
+
 # in  mapsme/omim/tools/python/maps_generator/var/etc/map_generator.ini MAIN_OUT_PATH: <full_path>/mapsme/temp
 
 outDir = os.path.abspath('/var/www/maps')
@@ -50,7 +52,7 @@ outOsmAnd = outDir + '/osmand'
 outMapsme = outDir + '/mapsme'
 outGarmin = outDir + '/garmin'
 
-tempDirs = [inputDir, tempMapsme, tempGarmin]
+tempDirs = [inputDir, tempMapsme, tempGarmin, tempSplit]
 
 innerDirs = [polyDir, splitDir, mapsmeDir, osmandDir,
              garminDir, OAMCDir, tempGarmin, tempMapsme]
@@ -95,6 +97,13 @@ def checkDirs():
                 os.system('sudo mkdir -p ' + folder)
                 os.system('sudo chown ' + user + ':' + user + ' ' + folder)
 
+    for folder in tempDirs:
+        if not os.path.isdir(folder):
+            try:
+                os.mkdir(folder)
+            except:
+                os.system('sudo mkdir -p ' + folder)
+                os.system('sudo chown ' + user + ':' + user + ' ' + folder)
 
 def prepare():
     checkDirs()
