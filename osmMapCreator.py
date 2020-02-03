@@ -26,10 +26,10 @@ urls = {
 }
 
 user = 'osm'
-currentDir = os.path.abspath('.')
 
 currentMap = os.path.join(currentDir, 'currentMap.txt')
 
+currentDir = os.path.abspath('.')
 inputDir = os.path.abspath('in')
 
 polyDir = os.path.abspath('poly')
@@ -73,7 +73,7 @@ def checkVersion(urlDate):
         print ('first launch')
         return 1
 
-def writeVersion(urlDate):
+def writeVersion(urlDate):    
     try:
         with open(currentMap, 'w') as vf:
             vf.write(urlDate)
@@ -81,23 +81,7 @@ def writeVersion(urlDate):
         print('can\'t write version file')
 
 def checkDirs():
-    for folder in innerDirs:
-        if not os.path.isdir(folder):
-            try:
-                os.mkdir(folder)
-            except:
-                os.system('sudo mkdir -p ' + folder)
-                os.system('sudo chown ' + user + ':' + user + ' ' + folder)
-
-    for folder in outDirs:
-        if not os.path.isdir(folder):
-            try:
-                os.mkdir(folder)
-            except:
-                os.system('sudo mkdir -p ' + folder)
-                os.system('sudo chown ' + user + ':' + user + ' ' + folder)
-
-    for folder in tempDirs:
+    for folder in (*innerDirs, *outDirs, *tempDirs )
         if not os.path.isdir(folder):
             try:
                 os.mkdir(folder)
