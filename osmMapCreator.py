@@ -229,9 +229,9 @@ def move():
     else:
         return 0
 
-def download():
-
-    print('Start downloading maps')
+def checkURL():
+    
+    print('Cheking maps urls')
 
     try:
         for map_name, url_to_map in urls['maps'].items():
@@ -243,18 +243,32 @@ def download():
             print(urlRawDate)
             urlDate  =  datetime.datetime(*urlRawDate[:6])
             print("Last modified: " + str(urlDate))
+            return str(urlDate.isoformat)
+
+    except:
+        print('Cheking failed')
+        print("Unexpected error:", sys.exc_info()[0])
+
+        return 0
+
+def download():
+
+    print('Start downloading maps')
+
+    try:
+        for map_name, url_to_map in urls['maps'].items():
+            print(map_name)
             pathToFile = os.path.join(inputDir, map_name + '.osm.pbf')
             print(pathToFile)
             if urllib.request.urlretrieve(url_to_map,  pathToFile):
                 print('all downloaded')
-                return str(urlDate.isoformat)
+                return 1
             else:
                return 0
 
     except:
         print('downloading failed')
         print("Unexpected error:", sys.exc_info()[0])
-
         return 0
 
 
@@ -328,17 +342,17 @@ def garmin():
 def main():
  #   prepare():
     checkDirs()
-    dl = download()
+    dl = checkURL()
 
-    if dl:
-        if checkVersion(dl):
-            print ('start')
-            if split():
-                osmand()
-            garmin()
-            mapsme()
-            if(move()):
-                writeVersion(dl)
+    if checkVersion(dl):
+        download()
+        print ('start')
+        if split():
+            osmand()
+        garmin()
+        mapsme()
+        if(move()):
+            writeVersion(dl)
     clean()
 
 
