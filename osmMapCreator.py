@@ -158,7 +158,7 @@ def clean():
 
     #osmconvert_tempfile
     for filename in os.listdir(currentDir):
-        file_path = os.path.join(folder, filename)
+        file_path = os.path.join(currentDir, filename)
         try:
             if (os.path.isfile(file_path) or os.path.islink(file_path)) and filename.find('osmconvert_tempfile') > -1:
                 os.unlink(file_path)
