@@ -7,6 +7,8 @@
 # TODO сделать 
 # TODO формировать json с датой и размещением файлов
 # TODO общий in с датой скачивания
+# TODO рапаралелить split для osmand
+
 
 import sys
 import requests
@@ -27,9 +29,9 @@ urls = {
 
 user = 'osm'
 
+currentDir = os.path.abspath('.')
 currentMap = os.path.join(currentDir, 'currentMap.txt')
 
-currentDir = os.path.abspath('.')
 inputDir = os.path.abspath('in')
 
 polyDir = os.path.abspath('poly')
@@ -73,15 +75,17 @@ def checkVersion(urlDate):
         print ('first launch')
         return 1
 
-def writeVersion(urlDate):    
+
+def writeVersion(urlDate):
     try:
         with open(currentMap, 'w') as vf:
             vf.write(urlDate)
     except:
         print('can\'t write version file')
 
+
 def checkDirs():
-    for folder in (*innerDirs, *outDirs, *tempDirs )
+    for folder in (*innerDirs, *outDirs, *tempDirs ):
         if not os.path.isdir(folder):
             try:
                 os.mkdir(folder)
@@ -151,7 +155,7 @@ def clean():
                     shutil.rmtree(file_path)
             except Exception as e:
                 print('Failed to delete %s. Reason: %s' % (file_path, e))
-    
+
     #osmconvert_tempfile
     for filename in os.listdir(currentDir):
         file_path = os.path.join(folder, filename)
@@ -219,7 +223,7 @@ def move():
     except:
         print('no garmin map')
 
-    #calculate how maps was moved 
+    #calculate how maps was moved
     moveCount = garminCount + mapsmeCount + osmandCount
     if moveCount > 12:
         return 1
@@ -230,7 +234,7 @@ def move():
         return 0
 
 def checkURL():
-    
+
     print('Cheking maps urls')
 
     try:
