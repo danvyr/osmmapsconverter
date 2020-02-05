@@ -250,7 +250,7 @@ def checkURL():
             print(urlRawDate)
             urlDate  =  datetime.datetime(*urlRawDate[:6])
             print("Last modified: " + str(urlDate))
-            return str(urlDate.isoformat)
+            return str(urlDate.isoformat())
 
     except:
         print('Cheking failed')
