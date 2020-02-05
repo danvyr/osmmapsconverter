@@ -1,13 +1,9 @@
 #!/usr/bin/python3.6
 
-
-# TODO рапаралелить split для osmand
 # TODO сделать автоперезапуск, если файл на geofabric ещё старый (нужен статус файл и его проверка, что бы был только один скрипт запущен)
-# TODO формировать json с датой создания файлов и путями скачивания
+# TODO формировать json и xml(osm_downloader format) с датой создания файлов и путями скачивания
 
 # TODO доставание полигонов из osm для любой страны (по админ уровню) или использование полигонов mapsme
-# TODO выбор какие карты и чем собирать с какими стилями и как резать.
-# TODO генерация json для приложения загрузки на android
 # TODO сделать тестовую замену name на name:be
 # TODO общий in, для разных приложения, с датой скачивания
 # TODO раскидать по модулям ?
@@ -21,6 +17,10 @@ import shutil
 import datetime
 import email.utils as eut
 
+from multiprocessing import Pool
+# from multiprocessing.dummy import Pool as ThreadPool
+
+from multiprocessing import cpu_count
 
 urls = {
     'osmandcreator': 'https://download.osmand.net/latest-night-build/OsmAndMapCreator-main.zip',
@@ -63,6 +63,13 @@ innerDirs = [polyDir, splitDir, mapsmeDir, osmandDir,
              garminDir, OAMCDir]
 outDirs = [outDir, outOsmAnd, outMapsme, outGarmin]
 
+moveCount = 0
+
+
+def run_command(command):
+    print (command)
+    os.system(command)
+
 
 def checkVersion(urlDate):
     # наверное не надо
@@ -96,6 +103,7 @@ def checkDirs():
                 os.system('sudo mkdir -p ' + folder)
                 os.system('sudo chown ' + user + ':' + user + ' ' + folder)
 
+
 def prepare():
     checkDirs()
 
@@ -127,7 +135,7 @@ def prepare():
 
     # prepare OSMAND
     try:
-        print('install osmand')
+        print('install osmandMapCreator')
 
         url = urls['osmandcreator']
         resp = requests.head(url)
@@ -169,23 +177,10 @@ def clean():
             print('Failed to delete %s. Reason: %s' % (file_path, e))
 
 
-def move():
+def moveMapsme():
 
-    moveCount = 0
-    osmandCount = 0
     mapsmeCount = 0
-    garminCount = 0
-    # check files in temp folders and backup
 
-    # move OsmAnd maps
-    print('move OsmAND map')
-    for file in os.listdir(osmandDir):
-        if file.endswith('.obf'):
-            print(file)
-            shutil.move(os.path.join(osmandDir, file),
-                        os.path.join(outOsmAnd, file))
-            osmandCount = osmandCount + 1
-    # move mapsme
     # find mapme maps
     path = ''
     status = False
@@ -216,7 +211,27 @@ def move():
                             os.path.join(outMapsme, file))
                 mapsmeCount = mapsmeCount + 1
     os.chdir(currentDir)
+    
+    moveCount = moveCount + mapsmeCount
+    return mapsmeCount
 
+
+def moveOsmand():
+    osmandCount = 0    
+    # move OsmAnd maps
+    print('move OsmAND map')
+    for file in os.listdir(osmandDir):
+        if file.endswith('.obf'):
+            print(file)
+            shutil.move(os.path.join(osmandDir, file),
+                        os.path.join(outOsmAnd, file))
+            osmandCount = osmandCount + 1
+    moveCount = moveCount + osmandCount
+    return osmandCount
+
+
+def moveGarmin():        
+    garminCount = 0
     # move garmin
     print('move garmin map')
     try:
@@ -226,15 +241,9 @@ def move():
     except:
         print('no garmin map')
 
-    #calculate how maps was moved
-    moveCount = garminCount + mapsmeCount + osmandCount
-    if moveCount > 12:
-        return 1
-    elif moveCount > 6:
-        print ('Something Wrong')
-        return 1
-    else:
-        return 0
+    moveCount = moveCount + garminCount
+    return garminCount
+
 
 def checkURL():
 
@@ -258,6 +267,7 @@ def checkURL():
 
         return 0
 
+
 def download():
 
     print('Start downloading maps')
@@ -280,8 +290,11 @@ def download():
 
 
 def split():
+    pool = Pool(cpu_count())
 
+    print('start split')
     try:
+        cmds = []
         for mapFile in os.listdir(inputDir):
             print(mapFile)
             for polyFile in os.listdir(polyDir):
@@ -290,9 +303,13 @@ def split():
                     + ' --complete-ways --complex-ways -o='  \
                     + '"' + os.path.join(splitDir, polyFile.replace('poly', 'pbf')) + '"'   \
                     + ' --statistics'
-                print(cmd)
-                os.system(cmd)
+                cmds.append(cmd)
+
+        pool.map(run_command, cmds)
+        pool.close()
+        pool.join()
         return 1
+
     except OSError as err:
         print("OS error: {0}".format(err))
         return 0
@@ -331,6 +348,7 @@ def osmand():
     except:
         print("Unexpected error:", sys.exc_info()[0])
         return 0
+    moveOsmand()
 
 
 def mapsme():
@@ -338,12 +356,14 @@ def mapsme():
     os.system(
         'python3.6 -m maps_generator --countries="Belarus*" --skip="coastline"')
     os.chdir(currentDir)
+    moveMapsme()
 
 
 def garmin():
     os.chdir(garminDir)
     os.system('bash build.sh')
     os.chdir(currentDir)
+    moveGarmin()
 
 
 def main():
@@ -352,14 +372,13 @@ def main():
     dl = checkURL()
 
     if checkVersion(dl):
-        download()
-        print ('start')
-        if split():
-            osmand()
-        garmin()
-        mapsme()
-        if(move()):
-            writeVersion(dl)
+        if(download())
+            if split():
+                osmand()                
+            garmin()
+            mapsme()
+            if(moveCount > 1):
+                writeVersion(dl)
     clean()
 
 
