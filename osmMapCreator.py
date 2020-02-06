@@ -180,6 +180,7 @@ def clean():
 def moveMapsme():
 
     mapsmeCount = 0
+    global moveCount
 
     # find mapme maps
     path = ''
@@ -211,13 +212,14 @@ def moveMapsme():
                             os.path.join(outMapsme, file))
                 mapsmeCount = mapsmeCount + 1
     os.chdir(currentDir)
-    
+
     moveCount = moveCount + mapsmeCount
     return mapsmeCount
 
 
 def moveOsmand():
-    osmandCount = 0    
+    osmandCount = 0
+    global moveCount
     # move OsmAnd maps
     print('move OsmAND map')
     for file in os.listdir(osmandDir):
@@ -230,7 +232,8 @@ def moveOsmand():
     return osmandCount
 
 
-def moveGarmin():        
+def moveGarmin():
+    global moveCount
     garminCount = 0
     # move garmin
     print('move garmin map')
@@ -376,9 +379,9 @@ def main():
             if split():
                 osmand()
             garmin()
-            mapsme()
-            if(moveCount > 1):
-                writeVersion(dl)
+        mapsme()
+        if(moveCount > 1):
+            writeVersion(dl)
     clean()
 
 
