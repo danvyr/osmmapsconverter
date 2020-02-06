@@ -372,9 +372,9 @@ def main():
     dl = checkURL()
 
     if checkVersion(dl):
-        if(download())
+        if(download()):
             if split():
-                osmand()                
+                osmand()
             garmin()
             mapsme()
             if(moveCount > 1):
