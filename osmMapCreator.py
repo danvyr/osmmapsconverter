@@ -337,6 +337,8 @@ def osmand():
             os.system(cmd)
 
         os.chdir(currentDir)
+        moveOsmand()
+
         return 1
 
     except OSError as err:
@@ -348,7 +350,6 @@ def osmand():
     except:
         print("Unexpected error:", sys.exc_info()[0])
         return 0
-    moveOsmand()
 
 
 def mapsme():
