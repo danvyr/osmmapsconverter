@@ -45,7 +45,7 @@ mapsmeDir = os.path.abspath('mapsme')
 osmandDir = os.path.abspath('osmand')
 garminDir = os.path.abspath('garmin')
 
-OAMCDir = os.path.abspath(osmandDir, 'OsmAndMapCreator')
+OAMCDir = os.path.join(osmandDir, 'OsmAndMapCreator')
 
 tempGarmin = os.path.join(garminDir, 'temp')
 tempMapsme = os.path.join(mapsmeDir, 'temp')
@@ -53,10 +53,10 @@ tempSplit = os.path.join(currentDir, 'split')
 
 # in  mapsme/omim/tools/python/maps_generator/var/etc/map_generator.ini MAIN_OUT_PATH: <full_path>/mapsme/temp
 
-outDir = os.path.abspath('/var/www/maps')
-outOsmAnd = os.path.abspath(outDir, 'osmand')
-outMapsme = os.path.abspath(outDir, 'mapsme')
-outGarmin = os.path.abspath(outDir, 'garmin')
+outDir = os.path.join('/var/www/maps')
+outOsmAnd = os.path.join(outDir, 'osmand')
+outMapsme = os.path.join(outDir, 'mapsme')
+outGarmin = os.path.join(outDir, 'garmin')
 
 tempDirs = [inputDir, tempMapsme, tempGarmin, tempSplit]
 innerDirs = [polyDir, splitDir, mapsmeDir, osmandDir, garminDir, OAMCDir]
@@ -331,9 +331,7 @@ def osmand():
             mapFile = os.path.join(splitDir, mapFile)
             print(mapFile)
 
-            cmd = 'java -Djava.util.logging.config.file="'+OAMCDir+'/logging.properties"' 
-                + javaOpt +
-                '-cp "'+OAMCDir+'/OsmAndMapCreator.jar:'+OAMCDir+'/lib/*.jar" net.osmand.MainUtilities generate-obf ' \
+            cmd = 'java -Djava.util.logging.config.file="'+OAMCDir+'/logging.properties"' + javaOpt + '-cp "'+OAMCDir+'/OsmAndMapCreator.jar:'+OAMCDir+'/lib/*.jar" net.osmand.MainUtilities generate-obf ' \
                 + '"' + mapFile + '"'
             print(cmd)
             os.system(cmd)
