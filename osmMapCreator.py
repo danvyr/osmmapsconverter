@@ -380,6 +380,8 @@ def main():
         mapsme()
         if(moveCount > 1):
             writeVersion(dl)
+    else:
+        print('old map')
     clean()
 
 
