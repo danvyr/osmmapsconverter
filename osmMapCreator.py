@@ -9,6 +9,7 @@
 # TODO раскидать по модулям ?
 
 
+import logging
 import sys
 import requests
 import urllib.request
@@ -16,7 +17,7 @@ import os
 import shutil
 import datetime
 import email.utils as eut
-
+from datetime import datetime, date, time
 from multiprocessing import Pool
 # from multiprocessing.dummy import Pool as ThreadPool
 
@@ -76,7 +77,7 @@ def checkVersion(urlDate):
     try:
         with open(currentMap, 'r') as vf:
             version = vf.readline()
-            if version != urlDate: 
+            if version != urlDate:
                 return 1
             else:
                 return 0
@@ -138,7 +139,8 @@ def prepare():
 
         url = urls['osmandcreator']
         resp = requests.head(url)
-        print("Last modified: " + resp.headers['last-modified'])
+        logging.info("Last modified: " + resp.headers['last-modified'])
+#        print("Last modified: " + resp.headers['last-modified'])
         pathToFile = os.path.join(osmandDir, 'OsmAndMapCreator-main.zip')
         urllib.request.urlretrieve(url,  pathToFile)
         os.system('unzip ' + pathToFile + ' -d ' + OAMCDir)
@@ -152,8 +154,11 @@ def prepare():
 
 
 def clean():
-    print ('Clean folders:')
-    print(tempDirs)
+#    print ('Clean folders:')
+    logging.info('Clean folders:')
+    logging.info(tempDirs)
+#    print(tempDirs)
+
     for folder in tempDirs:
         print(folder)
         for filename in os.listdir(folder):
@@ -180,7 +185,7 @@ def moveMapsme():
 
     mapsmeCount = 0
     global moveCount
-
+    logging.info('find mapme maps')
     # find mapme maps
     path = ''
     status = False
@@ -202,11 +207,11 @@ def moveMapsme():
             os.chdir(tempMapsme)
 
     # moving mapsme maps
-    print('move mapsme map')
+    logging.info('move mapsme map')
     if status:
         for file in os.listdir(path):
             if file.endswith('.mwm'):
-                print(file)
+                logging.info(file)
                 shutil.move(os.path.join(path, file),
                             os.path.join(outMapsme, file))
                 mapsmeCount = mapsmeCount + 1
@@ -250,7 +255,7 @@ def moveGarmin():
 def checkURL():
 
     print('Cheking maps urls')
-
+    logging.info('Cheking maps urls')
     try:
         for map_name, url_to_map in urls['maps'].items():
             print(map_name)
@@ -258,22 +263,25 @@ def checkURL():
             urlLastModified = resp.headers['last-modified']
             print (urlLastModified)
             urlRawDate = eut.parsedate(urlLastModified)
-            print(urlRawDate)
-            urlDate  =  datetime.datetime(*urlRawDate[:6])
-            print("Last modified: " + str(urlDate))
+            print("urlRawDate " +  str(urlRawDate))
+            urlDate  =  datetime(*urlRawDate[:6])
+            print("Last modified: " + str(urlDate.isoformat() ) )
+            logging.info("Last modified: " + str(urlDate.isoformat() ))
             return str(urlDate.isoformat())
 
     except:
-        print('Cheking failed')
+        print('Checking failed')
+        logging.info('Checking failed')
+        logging.info("Unexpected error:", sys.exc_info()[0])
         print("Unexpected error:", sys.exc_info()[0])
 
-        return 0
+        return '0'
 
 
 def download():
 
     print('Start downloading maps')
-
+    logging.info('Start downloading maps')
     try:
         for map_name, url_to_map in urls['maps'].items():
             print(map_name)
@@ -369,21 +377,39 @@ def garmin():
 
 def main():
  #   prepare():
+
+    logging.basicConfig(filename='osmmapcreator_' + str(datetime.today().strftime('%Y-%m-%d_%H-%M-%S')) + '.log', level=logging.INFO)
+    logging.info('Started')
+
     checkDirs()
+
     dl = checkURL()
 
+    print ('dl = '+ dl)
+    logging.info('Check version' + dl)
+
     if checkVersion(dl):
+        print('Run ')
+        logging.info('Start')
         if(download()):
+            logging.info('downloaded')
             if split():
                 osmand()
             garmin()
         mapsme()
         if(moveCount > 1):
             writeVersion(dl)
+            logging.info('Something done')
+        else:
+            logging.info('Nothing done')
+
     else:
         print('old map')
-    clean()
+        logging.info('old map')
 
+    clean()
+    logging.info('Finished')
 
 if __name__ == '__main__':
     main()
+
