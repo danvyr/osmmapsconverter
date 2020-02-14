@@ -36,6 +36,7 @@ javaOpt = ' -Xms128M -Xmx3200M '
 
 currentDir = os.path.abspath('.')
 currentMap = os.path.join(currentDir, 'currentMap.txt')
+currentStatus = os.path.join(currentDir, 'status.txt')
 
 inputDir = os.path.abspath('in')
 
@@ -66,9 +67,30 @@ outDirs = [outDir, outOsmAnd, outMapsme, outGarmin]
 moveCount = 0
 
 
+
+
 def run_command(command):
     print (command)
     os.system(command)
+
+
+def readStatus():
+    try:
+        with open(currentStatus, 'r') as f:
+            return  f.readline()
+    except:
+        with open(currentStatus, 'w') as f:
+            f.write('start')
+        return 'finished'
+
+def writeStatus(status):
+    try:
+        with open(currentStatus, 'w') as f:
+            f.write(status)
+            return 1
+    except:
+        return 0
+
 
 
 def checkVersion(urlDate):
@@ -381,34 +403,43 @@ def main():
     logging.basicConfig(filename='osmmapcreator_' + str(datetime.today().strftime('%Y-%m-%d_%H-%M-%S')) + '.log', level=logging.INFO)
     logging.info('Started')
 
-    checkDirs()
+    if readStatus() == 'finished':
+        writeStatus('running')
+        checkDirs()
 
-    dl = checkURL()
+        dl = checkURL()
+        
+        print ('Check version = '+ dl)
+        logging.info('Check version = ' + dl)
 
-    print ('dl = '+ dl)
-    logging.info('Check version' + dl)
+        if checkVersion(dl):
+            print('Run ')
+            logging.info('Start')
+            if(download()):
+                logging.info('downloaded')
+                if split():
+                    osmand()
+                garmin()
+            mapsme()
+            if(moveCount > 1):
+                writeVersion(dl)
+                logging.info('Something done')
+            else:
+                logging.info('Nothing done')
 
-    if checkVersion(dl):
-        print('Run ')
-        logging.info('Start')
-        if(download()):
-            logging.info('downloaded')
-            if split():
-                osmand()
-            garmin()
-        mapsme()
-        if(moveCount > 1):
-            writeVersion(dl)
-            logging.info('Something done')
         else:
-            logging.info('Nothing done')
+            print('old map')
+            logging.info('old map')
+
+        clean()
+        writeStatus('finished')
 
     else:
-        print('old map')
-        logging.info('old map')
+        logging.info('Can\'t start - check status file')
 
-    clean()
+
     logging.info('Finished')
+
 
 if __name__ == '__main__':
     main()
