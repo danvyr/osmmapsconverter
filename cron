@@ -1,1 +1,1 @@
-3  2 * * * cd /home/osm/dev/osmmapsconverter/ && python3 osmMapCreator.py &>>/home/osm/dev/osmmapsconverter/log
+*/20 3-7 * * * cd /home/osm/dev/osmmapsconverter/ && python3 osmMapCreator.py &>log

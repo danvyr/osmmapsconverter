@@ -115,3 +115,4 @@ mapsme/out/
 currentMap.txt
 log
 osmconvert_tempfile.*
+status*
