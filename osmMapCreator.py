@@ -1,6 +1,5 @@
 #!/usr/bin/python3.6
 
-# TODO сделать автоперезапуск, если файл на geofabric ещё старый (нужен статус файл и его проверка, что бы был только один скрипт запущен)
 # TODO формировать json и xml(osm_downloader format) с датой создания файлов и путями скачивания
 
 # TODO доставание полигонов из osm для любой страны (по админ уровню) или использование полигонов mapsme
@@ -42,6 +41,7 @@ inputDir = os.path.abspath('in')
 
 polyDir = os.path.abspath('poly')
 splitDir = os.path.abspath('split')
+logsDir = os.path.abspath('logs')
 
 mapsmeDir = os.path.abspath('mapsme')
 osmandDir = os.path.abspath('osmand')
@@ -61,7 +61,7 @@ outMapsme = os.path.join(outDir, 'mapsme')
 outGarmin = os.path.join(outDir, 'garmin')
 
 tempDirs = [inputDir, tempMapsme, tempGarmin, tempSplit]
-innerDirs = [polyDir, splitDir, mapsmeDir, osmandDir, garminDir, OAMCDir]
+innerDirs = [polyDir, splitDir, mapsmeDir, osmandDir, garminDir, OAMCDir, logsDir]
 outDirs = [outDir, outOsmAnd, outMapsme, outGarmin]
 
 moveCount = 0
@@ -399,8 +399,8 @@ def garmin():
 
 def main():
  #   prepare():
-
-    logging.basicConfig(filename='osmmapcreator_' + str(datetime.today().strftime('%Y-%m-%d_%H-%M-%S')) + '.log', level=logging.INFO)
+    logfile = os.path.join(logsDir, 'osmmapcreator_' + str(datetime.today().strftime('%Y-%m-%d_%H-%M-%S')) + '.log')
+    logging.basicConfig(filename=logfile, level=logging.INFO)
     logging.info('Started')
 
     if readStatus() == 'finished':
@@ -408,7 +408,7 @@ def main():
         checkDirs()
 
         dl = checkURL()
-        
+
         print ('Check version = '+ dl)
         logging.info('Check version = ' + dl)
 
