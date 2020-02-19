@@ -68,10 +68,22 @@ moveCount = 0
 
 
 
+logfile = os.path.join(logsDir, 'osmmapcreator_' + str(datetime.today().strftime('%Y-%m-%d_%H-%M-%S')) + '.log')
+logging.basicConfig(filename=logfile, level=logging.INFO)
+
 
 def run_command(command):
-    print (command)
+    log (command)
     os.system(command)
+
+
+def nowtime():
+    return datetime.today().strftime('%H-%M-%S: ')
+
+def log(status):
+    s = nowtime() + status
+    print(s)
+    logging.info(s)
 
 
 def readStatus():
@@ -104,7 +116,7 @@ def checkVersion(urlDate):
             else:
                 return 0
     except:
-        print ('first launch')
+        log ('first launch')
         return 1
 
 
@@ -113,7 +125,7 @@ def writeVersion(urlDate):
         with open(currentMap, 'w') as vf:
             vf.write(urlDate)
     except:
-        print('can\'t write version file')
+        log('can\'t write version file')
 
 
 def checkDirs():
@@ -128,16 +140,17 @@ def checkDirs():
 
 def prepare():
     checkDirs()
+    log('prepare')
 
     # install
     try:
-        print('install osmctools')
+        log('install osmctools')
         os.system('sudo apt-get install osmctools')
     except:
         pass
 
     try:
-        print('install mapsme')
+        log('install mapsme')
 
         os.system('sudo apt-get install git qtbase5-dev cmake libsqlite3-dev clang libc++-dev libboost-iostreams-dev libglu1-mesa-dev python3-pip -y')
         os.chdir(mapsmeDir)
@@ -157,12 +170,12 @@ def prepare():
 
     # prepare OSMAND
     try:
-        print('install osmandMapCreator')
+        log('install osmandMapCreator')
 
         url = urls['osmandcreator']
         resp = requests.head(url)
         logging.info("Last modified: " + resp.headers['last-modified'])
-#        print("Last modified: " + resp.headers['last-modified'])
+#        log("Last modified: " + resp.headers['last-modified'])
         pathToFile = os.path.join(osmandDir, 'OsmAndMapCreator-main.zip')
         urllib.request.urlretrieve(url,  pathToFile)
         os.system('unzip ' + pathToFile + ' -d ' + OAMCDir)
@@ -176,13 +189,11 @@ def prepare():
 
 
 def clean():
-#    print ('Clean folders:')
-    logging.info('Clean folders:')
-    logging.info(tempDirs)
-#    print(tempDirs)
+    log ('Clean folders:')
+    log(str(tempDirs))
 
     for folder in tempDirs:
-        print(folder)
+        log(folder)
         for filename in os.listdir(folder):
             file_path = os.path.join(folder, filename)
             try:
@@ -191,7 +202,7 @@ def clean():
                 elif os.path.isdir(file_path):
                     shutil.rmtree(file_path)
             except Exception as e:
-                print('Failed to delete %s. Reason: %s' % (file_path, e))
+                log('Failed to delete %s. Reason: %s' % (file_path, e))
 
     #osmconvert_tempfile
     for filename in os.listdir(currentDir):
@@ -200,36 +211,36 @@ def clean():
             if (os.path.isfile(file_path) or os.path.islink(file_path)) and filename.find('osmconvert_tempfile') > -1:
                 os.unlink(file_path)
         except Exception as e:
-            print('Failed to delete %s. Reason: %s' % (file_path, e))
+            log('Failed to delete %s. Reason: %s' % (file_path, e))
 
 
 def moveMapsme():
 
     mapsmeCount = 0
     global moveCount
-    logging.info('find mapme maps')
+    log('find mapme maps')
     # find mapme maps
     path = ''
     status = False
     for folder in os.listdir(tempMapsme):
         dirL1 = os.path.join(tempMapsme, folder)
         if (folder.find('20') > -1) and os.path.isdir(dirL1):
-            print(dirL1)
+            log(dirL1)
             for t in os.listdir(dirL1):
                 dirL2 = os.path.join(dirL1, t)
                 if (t.find('20') > -1) and os.path.isdir(dirL2):
                     os.chdir(dirL2)
                     with open(os.path.join(dirL1, 'status/stages.status'), 'r') as f:
                         str = f.readline()
-                        print(str)
+                        log(str)
                         if str == 'finish':
                             status = True
                             path = dirL2
-                            print(path)
+                            log(path)
             os.chdir(tempMapsme)
 
     # moving mapsme maps
-    logging.info('move mapsme map')
+    log('move mapsme map')
     if status:
         for file in os.listdir(path):
             if file.endswith('.mwm'):
@@ -247,10 +258,10 @@ def moveOsmand():
     osmandCount = 0
     global moveCount
     # move OsmAnd maps
-    print('move OsmAND map')
+    log('move OsmAND map')
     for file in os.listdir(osmandDir):
         if file.endswith('.obf'):
-            print(file)
+            log(file)
             shutil.move(os.path.join(osmandDir, file),
                         os.path.join(outOsmAnd, file))
             osmandCount = osmandCount + 1
@@ -262,13 +273,13 @@ def moveGarmin():
     global moveCount
     garminCount = 0
     # move garmin
-    print('move garmin map')
+    log('move garmin map')
     try:
         shutil.move(os.path.join(tempGarmin, 'gmapsupp.img'),
                     os.path.join(outGarmin, 'gmapsupp.img'))
         garminCount = garminCount + 1
     except:
-        print('no garmin map')
+        log('no garmin map')
 
     moveCount = moveCount + garminCount
     return garminCount
@@ -276,61 +287,56 @@ def moveGarmin():
 
 def checkURL():
 
-    print('Cheking maps urls')
-    logging.info('Cheking maps urls')
+    log('Cheking maps urls')
     try:
         for map_name, url_to_map in urls['maps'].items():
-            print(map_name)
+            log(map_name)
             resp = requests.head(url_to_map)
             urlLastModified = resp.headers['last-modified']
-            print (urlLastModified)
+            log (urlLastModified)
             urlRawDate = eut.parsedate(urlLastModified)
-            print("urlRawDate " +  str(urlRawDate))
+            log("urlRawDate " +  str(urlRawDate))
             urlDate  =  datetime(*urlRawDate[:6])
-            print("Last modified: " + str(urlDate.isoformat() ) )
-            logging.info("Last modified: " + str(urlDate.isoformat() ))
+            log("Last modified: " + str(urlDate.isoformat() ) )
             return str(urlDate.isoformat())
 
     except:
-        print('Checking failed')
-        logging.info('Checking failed')
-        logging.info("Unexpected error:", sys.exc_info()[0])
-        print("Unexpected error:", sys.exc_info()[0])
+        log('Checking failed')
+        log("Unexpected error:", sys.exc_info()[0])
 
         return '0'
 
 
 def download():
 
-    print('Start downloading maps')
-    logging.info('Start downloading maps')
+    log('Start downloading maps')
     try:
         for map_name, url_to_map in urls['maps'].items():
-            print(map_name)
+            log(map_name)
             pathToFile = os.path.join(inputDir, map_name + '.osm.pbf')
-            print(pathToFile)
+            log(pathToFile)
             if urllib.request.urlretrieve(url_to_map,  pathToFile):
-                print('all downloaded')
+                log('all downloaded')
                 return 1
             else:
                return 0
 
     except:
-        print('downloading failed')
-        print("Unexpected error:", sys.exc_info()[0])
+        log('downloading failed')
+        log("Unexpected error:", sys.exc_info()[0])
         return 0
 
 
 def split():
     pool = Pool(cpu_count())
 
-    print('start split')
+    log('Start split')
     try:
         cmds = []
         for mapFile in os.listdir(inputDir):
-            print(mapFile)
+            log(mapFile)
             for polyFile in os.listdir(polyDir):
-                print(polyFile)
+                log(polyFile)
                 cmd = 'osmconvert ' + os.path.join(inputDir, mapFile) + ' -B=' + '"' + os.path.join(polyDir, polyFile) + '"' \
                     + ' --complete-ways --complex-ways -o='  \
                     + '"' + os.path.join(splitDir, polyFile.replace('poly', 'pbf')) + '"'   \
@@ -340,68 +346,75 @@ def split():
         pool.map(run_command, cmds)
         pool.close()
         pool.join()
+        log('Finish split')
         return 1
 
     except OSError as err:
-        print("OS error: {0}".format(err))
+        log("OS error: {0}".format(err))
         return 0
     except ValueError:
-        print("Could not convert data to an integer.")
+        log("Could not convert data to an integer.")
         return 0
     except:
-        print("Unexpected error:", sys.exc_info()[0])
+        log("Unexpected error:", sys.exc_info()[0])
         return 0
 
 
 def osmand():
+    log('Start OSMAND map Creator')
     try:
         os.chdir(osmandDir)
-        #folder = 'OsmAndMapCreator'
         for mapFile in os.listdir(splitDir):
             mapFile = os.path.join(splitDir, mapFile)
-            print(mapFile)
+            log(mapFile)
 
             cmd = 'java -Djava.util.logging.config.file="'+OAMCDir+'/logging.properties"' + javaOpt + '-cp "'+OAMCDir+'/OsmAndMapCreator.jar:'+OAMCDir+'/lib/*.jar" net.osmand.MainUtilities generate-obf ' \
                 + '"' + mapFile + '"'
-            print(cmd)
+            log(cmd)
             os.system(cmd)
+
+        log('Finish OSMAND map Creator')
 
         os.chdir(currentDir)
         moveOsmand()
-
         return 1
 
     except OSError as err:
-        print("OS error: {0}".format(err))
+        log("OS error: {0}".format(err))
         return 0
     except ValueError:
-        print("Could not convert data to an integer.")
+        log("Could not convert data to an integer.")
         return 0
     except:
-        print("Unexpected error:", sys.exc_info()[0])
+        log("Unexpected error:", sys.exc_info()[0])
         return 0
 
 
 def mapsme():
+    log('Start MAPSME map Creator')
     os.chdir(os.path.join(mapsmeDir, 'omim/tools/python'))
     os.system(
         'python3.6 -m maps_generator --countries="Belarus*" --skip="coastline"')
     os.chdir(currentDir)
+    log('Finish MAPSME map Creator')
     moveMapsme()
 
 
 def garmin():
+    log('Start GARMIN map Creator')
     os.chdir(garminDir)
     os.system('bash build.sh')
     os.chdir(currentDir)
+    log('Finish GARMIN map Creator')
+
     moveGarmin()
 
 
 def main():
  #   prepare():
-    logfile = os.path.join(logsDir, 'osmmapcreator_' + str(datetime.today().strftime('%Y-%m-%d_%H-%M-%S')) + '.log')
-    logging.basicConfig(filename=logfile, level=logging.INFO)
-    logging.info('Started')
+
+
+    log('Started')
 
     if readStatus() == 'finished':
         writeStatus('running')
@@ -409,36 +422,33 @@ def main():
 
         dl = checkURL()
 
-        print ('Check version = '+ dl)
-        logging.info('Check version = ' + dl)
+        log ('Check version = '+ dl)
 
         if checkVersion(dl):
-            print('Run ')
-            logging.info('Start')
+            log('Run ')
             if(download()):
-                logging.info('downloaded')
+                log('downloaded')
                 if split():
                     osmand()
                 garmin()
             mapsme()
             if(moveCount > 1):
                 writeVersion(dl)
-                logging.info('Something done')
+                log('Something done')
             else:
-                logging.info('Nothing done')
+                log('Nothing done')
 
         else:
-            print('old map')
-            logging.info('old map')
+            log('old map')
 
         clean()
         writeStatus('finished')
 
     else:
-        logging.info('Can\'t start - check status file')
+        log('Can\'t start - check status file')
 
 
-    logging.info('Finished')
+    log('Finished')
 
 
 if __name__ == '__main__':
