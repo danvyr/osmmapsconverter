@@ -1,4 +1,4 @@
-#!/usr/bin/python3.6
+#!/usr/bin/env python3
 
 # TODO формировать json и xml(osm_downloader format) с датой создания файлов и путями скачивания
 
