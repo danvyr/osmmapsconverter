@@ -29,6 +29,14 @@ urls = {
 
          }
 }
+#mapsme_maps='Belarus_Brest Region Belarus_Homiel Region Belarus_Hrodna Region Belarus_Maglieu Region Belarus_Minsk Region Belarus_Vitebsk Region'
+mapsme_maps=['Belarus_Minsk Region',
+             'Belarus_Brest Region',
+             'Belarus_Homiel Region',
+             'Belarus_Hrodna Region',
+             'Belarus_Maglieu Region',
+             'Belarus_Vitebsk Region']
+
 
 user = 'osm'
 javaOpt = ' -Xms128M -Xmx3200M '
@@ -393,11 +401,16 @@ def osmand():
 def mapsme():
     log('Start MAPSME map Creator')
     os.chdir(os.path.join(mapsmeDir, 'omim/tools/python'))
-    os.system(
-        'python3.6 -m maps_generator --countries="Belarus*" --skip="coastline"')
+    print (len(mapsme_maps))
+    for map in mapsme_maps:
+        log('Start ' + str(map))
+        os.chdir(os.path.join(mapsmeDir, 'omim/tools/python'))
+        os.system('python3.6 -m maps_generator --countries="' + map + '" --skip="coastline"')
+        moveMapsme()
+        clean()
     os.chdir(currentDir)
-    log('Finish MAPSME map Creator')
-    moveMapsme()
+    log('Finish MAPSME maps')
+ #   moveMapsme()
 
 
 def garmin():
