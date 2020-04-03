@@ -37,6 +37,20 @@ java -jar mkgmap/mkgmap.jar \
 
 mv $TEMP_DIR/gmapsupp.img $TEMP_DIR/gmapsupp_general.img
 
+
+java -jar mkgmap/mkgmap.jar \
+    --route --add-pois-to-areas \
+    --bounds=bounds --index  \
+    --gmapsupp --mapname=80808080 \
+    --link-pois-to-ways \
+    --style=routes-bicycle \
+    --country-name=Belarus \
+    --country-abbr=BY  \
+    "temp\6324*.osm.pbf"
+
+mv $TEMP_DIR/gmapsupp.img $TEMP_DIR/gmapsupp_routes_bicycle.img
+
+
 java -jar mkgmap/mkgmap.jar \
     --verbose \
     --output-dir=$TEMP_DIR \

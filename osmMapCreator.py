@@ -283,8 +283,12 @@ def moveGarmin():
     # move garmin
     log('move garmin map')
     try:
-        shutil.move(os.path.join(tempGarmin, 'gmapsupp.img'),
-                    os.path.join(outGarmin, 'gmapsupp.img'))
+        shutil.move(os.path.join(tempGarmin, 'gmapsupp_general.img'),
+                    os.path.join(outGarmin, 'gmapsupp_general.img'))
+        shutil.move(os.path.join(tempGarmin, 'gmapsupp_stranger.img'),
+                    os.path.join(outGarmin, 'gmapsupp_stranger.img'))
+        shutil.move(os.path.join(tempGarmin, 'gmapsupp_routes_bicycle.img'),
+                    os.path.join(outGarmin, 'gmapsupp_routes_bicycle.img'))
         garminCount = garminCount + 1
     except:
         log('no garmin map')
