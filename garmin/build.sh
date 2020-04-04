@@ -41,7 +41,7 @@ mv $TEMP_DIR/gmapsupp.img $TEMP_DIR/gmapsupp_general.img
 java -jar mkgmap/mkgmap.jar \
     --route --add-pois-to-areas \
     --bounds=bounds --index  \
-    --gmapsupp --mapname=80808080 \
+    --gmapsupp --mapname=80808081 \
     --link-pois-to-ways \
     --style=routes-bicycle \
     --country-name=Belarus \
@@ -71,7 +71,7 @@ java -jar mkgmap/mkgmap.jar \
     --remove-short-arcs \
     --drive-on=right \
     --check-roundabouts \
-    --mapname=80808081 \
+    --mapname=80808082 \
     --make-poi-index \
     --index \
     --poi-address \

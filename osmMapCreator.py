@@ -314,7 +314,7 @@ def checkURL():
 
     except:
         log('Checking failed')
-        log("Unexpected error:", sys.exc_info()[0])
+        log("Unexpected error:"+ sys.exc_info()[0])
 
         return '0'
 
@@ -335,7 +335,7 @@ def download():
 
     except:
         log('downloading failed')
-        log("Unexpected error:", sys.exc_info()[0])
+        log("Unexpected error:"+ sys.exc_info()[0])
         return 0
 
 
@@ -368,7 +368,7 @@ def split():
         log("Could not convert data to an integer.")
         return 0
     except:
-        log("Unexpected error:", sys.exc_info()[0])
+        log("Unexpected error:"+ sys.exc_info()[0])
         return 0
 
 
@@ -398,7 +398,7 @@ def osmand():
         log("Could not convert data to an integer.")
         return 0
     except:
-        log("Unexpected error:", sys.exc_info()[0])
+        log("Unexpected error:"+ sys.exc_info()[0])
         return 0
 
 
