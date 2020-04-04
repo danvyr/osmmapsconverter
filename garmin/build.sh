@@ -9,6 +9,7 @@ BOUNDS=bounds
 STYLE_FILE="$STYLES/my_stranger/"
 TEMPLATE_ARGS="$TEMP_DIR/template.args"
 TYP="$STYLES/my_stranger.typ"
+DATE=`date +%F`
 
 echo "TEMP_DIR = $TEMP_DIR "
 echo "STYLES = $STYLES "
@@ -16,7 +17,7 @@ echo "BOUNDS = $BOUNDS "
 echo "STYLE_FILE = $STYLE_FILE "
 echo "TEMPLATE_ARGS = $TEMPLATE_ARGS "
 echo "TYP = $TYP "
-
+echo "DATE = $DATE"
 
 java -jar split/splitter.jar \
     --max-nodes=1200000 \
@@ -28,25 +29,31 @@ java -jar split/splitter.jar \
 
 java -jar mkgmap/mkgmap.jar \
     --route --add-pois-to-areas \
-    --bounds=bounds --index  \
+    --index  \
+    --bounds=$BOUNDS \
     --gmapsupp --mapname=80808080 \
     --link-pois-to-ways \
     --country-name=Belarus \
     --country-abbr=BY  \
-    "temp\6324*.osm.pbf"
+    --description="Belarus_general, v.$DATE" \
+    --output-dir=$TEMP_DIR \
+    -c $TEMPLATE_ARGS
 
 mv $TEMP_DIR/gmapsupp.img $TEMP_DIR/gmapsupp_general.img
 
 
 java -jar mkgmap/mkgmap.jar \
     --route --add-pois-to-areas \
-    --bounds=bounds --index  \
+    --bounds=$BOUNDS \
+    --index  \
     --gmapsupp --mapname=80808081 \
     --link-pois-to-ways \
     --style=routes-bicycle \
     --country-name=Belarus \
     --country-abbr=BY  \
-    "temp\6324*.osm.pbf"
+    --description="Belarus_bicycle, v.$DATE" \
+    --output-dir=$TEMP_DIR \
+    -c $TEMPLATE_ARGS
 
 mv $TEMP_DIR/gmapsupp.img $TEMP_DIR/gmapsupp_routes_bicycle.img
 
@@ -59,7 +66,7 @@ java -jar mkgmap/mkgmap.jar \
     --family-name="OpenStreetMap + ST-GIS by Maks Vasilev" \
     --product-id=1 \
     --family-id=43 \
-    --description="velo100, v.%DATE%" \
+    --description="Belarus_velo100, v.$DATE" \
     --country-name="BELARUS" \
     --country-abbr="BY" \
     --copyright-message="OpenStreetMap CC-BY-SA 2.0, ST-GIS CC-BY-SA 3.0, ST-GIS, Maks Vasilev" \
