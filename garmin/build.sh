@@ -1,7 +1,7 @@
 #!/bin/sh
 
 TEMP_DIR=temp
-PBF_FILE=../in/belarus.osm.pbf
+PBF_FILE=../in/belarus-latest.osm.pbf
 # PBF_FILE=~/belarus-latest-internal.osm.pbf
 STYLES=styles
 BOUNDS=bounds

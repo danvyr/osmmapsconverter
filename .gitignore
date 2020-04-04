@@ -116,3 +116,4 @@ currentMap.txt
 log
 osmconvert_tempfile.*
 status*
+garmin/bounds
