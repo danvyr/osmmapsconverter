@@ -14,6 +14,7 @@ import requests
 import urllib.request
 import os
 import shutil
+import glob
 import datetime
 import email.utils as eut
 from datetime import datetime, date, time
@@ -280,16 +281,14 @@ def moveOsmand():
 def moveGarmin():
     global moveCount
     garminCount = 0
-    # move garmin
+    # move garmin temp/Belarus_map_general.img
     log('move garmin map')
     try:
-        shutil.move(os.path.join(tempGarmin, 'gmapsupp_general.img'),
-                    os.path.join(outGarmin, 'gmapsupp_general.img'))
-        shutil.move(os.path.join(tempGarmin, 'gmapsupp_stranger.img'),
-                    os.path.join(outGarmin, 'gmapsupp_stranger.img'))
-        shutil.move(os.path.join(tempGarmin, 'gmapsupp_routes_bicycle.img'),
-                    os.path.join(outGarmin, 'gmapsupp_routes_bicycle.img'))
-        garminCount = garminCount + 1
+        name = 'Belarus_*.img'
+        path = tempGarmin + '/' + name
+        for file in glob.glob(path):
+            shutil.move(file, outGarmin)
+            garminCount = garminCount + 1
     except:
         log('no garmin map')
 
