@@ -1,8 +1,9 @@
 #!/bin/sh
 
 TEMP_DIR=temp
-PBF_FILE=../in/belarus-latest.osm.pbf
-# PBF_FILE=~/belarus-latest-internal.osm.pbf
+PBF_FILE=../in/belarus.osm.pbf
+#PBF_FILE=~/belarus-latest-internal.osm.pbf
+#PBF_FILE=../in/belarus-latest.osm.pbf
 STYLES=styles
 BOUNDS=bounds-latest.zip
 
@@ -23,13 +24,13 @@ echo "TEMPLATE_ARGS = $TEMPLATE_ARGS "
 echo "STRANGER_TYP = $STRANGER_TYP "
 echo "DATE = $DATE"
 
-# java -jar split/splitter.jar \
-#     --max-nodes=1200000 \
-#     --overlap=12000 \
-#     --keep-complete=false \
-#     --output=pbf \
-#     --output-dir=$TEMP_DIR \
-#     $PBF_FILE
+java -jar split/splitter.jar \
+    --max-nodes=1200000 \
+    --overlap=12000 \
+    --keep-complete=false \
+    --output=pbf \
+    --output-dir=$TEMP_DIR \
+    $PBF_FILE
 
 
 
@@ -45,6 +46,7 @@ java -jar mkgmap/mkgmap.jar \
     --index  \
     --bounds=$BOUNDS \
     --gmapsupp \
+    --name-tag-list=name,name:ru,name:be,int_name \
     --mapname=$MAPNAME \
     --family-id=$FAMILY_ID \
     --product-id=$PRODUCT_ID \
@@ -100,6 +102,7 @@ java -jar mkgmap/mkgmap.jar \
 #     --bounds=$BOUNDS \
 #     --index  \
 #     --gmapsupp \
+#     --name-tag-list=name,name:ru,name:be,int_name \
 #     --mapname=$MAPNAME \
 #     --family-id=$FAMILY_ID \
 #     --link-pois-to-ways \
