@@ -4,11 +4,11 @@ WORKDIR /mapsme
 
 COPY omim /mapsme 
 
-RUN apt-get update && RUN apt-get upgrade -y
+RUN apt-get update && apt-get upgrade -y
 
-RUN apt-get install qtbase5-dev cmake libsqlite3-dev clang libc++-dev libboost-iostreams-dev python-pip python3-setuptools  libglu1-mesa-dev python3-pip  install libboost-tools-dev libboost-thread1.62-dev magics++ -y
+RUN apt-get install qtbase5-dev cmake libsqlite3-dev clang libc++-dev libboost-iostreams-dev python-pip python3-setuptools  libglu1-mesa-dev python3-pip  libboost-tools-dev libboost-thread1.62-dev magics++ -y
 
-RUN cd omim && echo | ./configure.sh
+RUN cd omim && git checkout release-103 && echo | ./configure.sh
 
 RUN ./tools/unix/build_omim.sh -sr generator_tool
 
