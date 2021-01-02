@@ -12,12 +12,12 @@ RUN cd omim && git checkout release-103 && echo | ./configure.sh
 
 RUN ./tools/unix/build_omim.sh -sr generator_tool
 
-RUN cd /mapsme/omim/tools/python/maps_generator && pip3 install -r requirements.txt
+RUN cd tools/python/maps_generator && pip3 install -r requirements.txt
 
 #RUN cp map_generator.ini /mapsme/omim/tools/python/maps_generator/var/etc/map_generator.ini
 
 #CMD cd /mapsme/tools/python/ &&  python3.6 -m maps_generator --countries="Belarus*"
-#
+
 #cd omim/tools/python
 #python$ python3.6 -m maps_generator -h
 
@@ -25,6 +25,8 @@ RUN cd /mapsme/omim/tools/python/maps_generator && pip3 install -r requirements.
 #https://github.com/mapsme/omim/tree/master/tools/python/maps_generator
 
 #tools/unix/build_omim.sh -r
+
+#python3.6 -m maps_generator --countries="Belarus_Minsk Region" --skip="Coastline"
 
 #python3.6 -m maps_generator --countries="Belarus*" --skip="coastline"
 
