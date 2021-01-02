@@ -413,7 +413,7 @@ def mapsme():
         clean()
     os.chdir(currentDir)
     log('Finish MAPSME maps')
- #   moveMapsme()
+    moveMapsme()
 
 
 def garmin():

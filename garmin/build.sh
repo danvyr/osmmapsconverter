@@ -63,7 +63,7 @@ mv $TEMP_DIR/gmapsupp.img $TEMP_DIR/"$NAME"_general.img
 
 
 FAMILY_ID=5051
-MAPNAME=80808081
+MAPNAME=80818081
 PRODUCT_ID=2
 
 java -jar mkgmap/mkgmap.jar \
@@ -117,7 +117,7 @@ mv $TEMP_DIR/gmapsupp.img $TEMP_DIR/"$NAME"_routes_bicycle.img
 
 
 FAMILY_ID=5052
-MAPNAME=80808082
+MAPNAME=80828082
 PRODUCT_ID=3
 
 java -jar mkgmap/mkgmap.jar \
@@ -156,7 +156,7 @@ mv $TEMP_DIR/gmapsupp.img $TEMP_DIR/"$NAME"_stranger.img
 
 
 FAMILY_ID=5053
-MAPNAME=80808083
+MAPNAME=80838083
 PRODUCT_ID=4
 
 java -jar mkgmap/mkgmap.jar \
@@ -192,3 +192,6 @@ java -jar mkgmap/mkgmap.jar \
 
 
 mv $TEMP_DIR/gmapsupp.img $TEMP_DIR/"$NAME"_generic_new.img
+
+rm temp/Belarus_map_routes_bicycle.img
+mv temp/Belarus_map_* /var/www/maps/garmin/
