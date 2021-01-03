@@ -408,7 +408,7 @@ def mapsme():
     for map in mapsme_maps:
         log('Start ' + str(map))
         os.chdir(os.path.join(mapsmeDir, 'omim/tools/python'))
-        os.system('python3.6 -m maps_generator --countries="' + map + '" --skip="coastline"')
+        os.system('python3.6 -m maps_generator --countries="' + map + '" --skip="Coastline"')
         moveMapsme()
         clean()
     os.chdir(currentDir)
