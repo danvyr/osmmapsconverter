@@ -31,12 +31,14 @@ urls = {
          }
 }
 #mapsme_maps='Belarus_Brest Region Belarus_Homiel Region Belarus_Hrodna Region Belarus_Maglieu Region Belarus_Minsk Region Belarus_Vitebsk Region'
-mapsme_maps=['Belarus_Minsk Region',
+mapsme_maps=[
+             'Belarus_Minsk Region',
              'Belarus_Brest Region',
              'Belarus_Homiel Region',
              'Belarus_Hrodna Region',
              'Belarus_Maglieu Region',
-             'Belarus_Vitebsk Region']
+             'Belarus_Vitebsk Region'
+            ]
 
 
 user = 'osm'
@@ -235,31 +237,39 @@ def moveMapsme():
         dirL1 = os.path.join(tempMapsme, folder)
         if (folder.find('20') > -1) and os.path.isdir(dirL1):
             log(dirL1)
-            for t in os.listdir(dirL1):
-                dirL2 = os.path.join(dirL1, t)
-                if (t.find('20') > -1) and os.path.isdir(dirL2):
-                    os.chdir(dirL2)
-                    with open(os.path.join(dirL1, 'status/stages.status'), 'r') as f:
-                        str = f.readline()
-                        log(str)
-                        if str == 'finish':
-                            status = True
-                            path = dirL2
-                            log(path)
+            t = folder[2:10].replace('_','')
+            log(t)
+            dirL2 = os.path.join(dirL1, t)
+            log(dirL2)
+            if os.path.isdir(dirL2):
+                os.chdir(dirL2)
+                log(dirL2)
+                status_file = os.path.join(dirL1, 'status/stages.status')
+                log(status_file)
+                with open(status_file, 'r') as f:
+                    str = f.readline()
+                    log('Status ')
+                    log(str)
+                    if str == 'finish':
+                        status = True
+                        path = dirL2
+                        log(path)
             os.chdir(tempMapsme)
 
     # moving mapsme maps
-    log('move mapsme map')
     if status:
+        log('move mapsme map')
         for file in os.listdir(path):
             if file.endswith('.mwm'):
                 logging.info(file)
                 shutil.move(os.path.join(path, file),
                             os.path.join(outMapsme, file))
                 mapsmeCount = mapsmeCount + 1
+    else:
+        log('Not move mapsme map')
     os.chdir(currentDir)
-
     moveCount = moveCount + mapsmeCount
+
     return mapsmeCount
 
 
@@ -413,7 +423,6 @@ def mapsme():
         clean()
     os.chdir(currentDir)
     log('Finish MAPSME maps')
-    moveMapsme()
 
 
 def garmin():
