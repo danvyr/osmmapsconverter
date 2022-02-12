@@ -2,7 +2,7 @@
 
 # TODO формировать json и xml(osm_downloader format) с датой создания файлов и путями скачивания
 
-# TODO доставание полигонов из osm для любой страны (по админ уровню) или использование полигонов mapsme
+# TODO доставание полигонов из osm для любой страны (по админ уровню) или использование полигонов organicmap
 # TODO сделать тестовую замену name на name:be
 # TODO общий in, для разных приложения, с датой скачивания
 # TODO раскидать по модулям ?
@@ -30,8 +30,8 @@ urls = {
 
          }
 }
-#mapsme_maps='Belarus_Brest Region Belarus_Homiel Region Belarus_Hrodna Region Belarus_Maglieu Region Belarus_Minsk Region Belarus_Vitebsk Region'
-mapsme_maps=[
+#organicmap_maps='Belarus_Brest Region Belarus_Homiel Region Belarus_Hrodna Region Belarus_Maglieu Region Belarus_Minsk Region Belarus_Vitebsk Region'
+organicmap_maps=[
              'Belarus_Minsk Region',
              'Belarus_Brest Region',
              'Belarus_Homiel Region',
@@ -54,26 +54,26 @@ polyDir = os.path.abspath('poly')
 splitDir = os.path.abspath('split')
 logsDir = os.path.abspath('logs')
 
-mapsmeDir = os.path.abspath('mapsme')
+organicmapDir = os.path.abspath('organicmap')
 osmandDir = os.path.abspath('osmand')
 garminDir = os.path.abspath('garmin')
 
 OAMCDir = os.path.join(osmandDir, 'OsmAndMapCreator')
 
 tempGarmin = os.path.join(garminDir, 'temp')
-tempMapsme = os.path.join(mapsmeDir, 'temp')
+tempOrganicmap = os.path.join(organicmapDir, 'map_build')
 tempSplit = os.path.join(currentDir, 'split')
 
-# in  mapsme/omim/tools/python/maps_generator/var/etc/map_generator.ini MAIN_OUT_PATH: <full_path>/mapsme/temp
+# in  organicmap/omim/tools/python/maps_generator/var/etc/map_generator.ini MAIN_OUT_PATH: <full_path>/organicmap/temp
 
 outDir = os.path.join('/var/www/maps')
 outOsmAnd = os.path.join(outDir, 'osmand')
-outMapsme = os.path.join(outDir, 'mapsme')
+outOrganicmaps = os.path.join(outDir, 'organicmap')
 outGarmin = os.path.join(outDir, 'garmin')
 
-tempDirs = [inputDir, tempMapsme, tempGarmin, tempSplit]
-innerDirs = [polyDir, splitDir, mapsmeDir, osmandDir, garminDir, OAMCDir, logsDir]
-outDirs = [outDir, outOsmAnd, outMapsme, outGarmin]
+tempDirs = [inputDir, tempOrganicmap, tempGarmin, tempSplit]
+innerDirs = [polyDir, splitDir, organicmapDir, osmandDir, garminDir, OAMCDir, logsDir]
+outDirs = [outDir, outOsmAnd, outOrganicmaps, outGarmin]
 
 moveCount = 0
 
@@ -160,24 +160,6 @@ def prepare():
     except:
         pass
 
-    try:
-        log('install mapsme')
-
-        os.system('sudo apt-get install git qtbase5-dev cmake libsqlite3-dev clang libc++-dev libboost-iostreams-dev libglu1-mesa-dev python3-pip -y')
-        os.chdir(mapsmeDir)
-        os.system(
-            'git clone --depth=1 --recursive https://github.com/mapsme/omim.git')
-        os.chdir(mapsmeDir + '/omim')
-        os.system('./configure.sh')
-        os.system('./tools/unix/build_omim.sh -sr generator_tool')
-        os.chdir('tools/python/maps_generator')
-        os.system('pip3 install -r requirements.txt')
-        os.system('cp ' + os.path.join(mapsmeDir,
-                                       '/map_generator.ini') + ' var/etc/map_generator.ini')
-        os.chdir(currentDir)
-
-    except:
-        pass
 
     # prepare OSMAND
     try:
@@ -225,16 +207,16 @@ def clean():
             log('Failed to delete %s. Reason: %s' % (file_path, e))
 
 
-def moveMapsme():
+def moveOrganicmaps():
 
-    mapsmeCount = 0
+    organicmapsCount = 0
     global moveCount
     log('find mapme maps')
     # find mapme maps
     path = ''
     status = False
-    for folder in os.listdir(tempMapsme):
-        dirL1 = os.path.join(tempMapsme, folder)
+    for folder in os.listdir(tempOrganicmap):
+        dirL1 = os.path.join(tempOrganicmap, folder)
         if (folder.find('20') > -1) and os.path.isdir(dirL1):
             log(dirL1)
             t = folder[2:10].replace('_','')
@@ -254,23 +236,23 @@ def moveMapsme():
                         status = True
                         path = dirL2
                         log(path)
-            os.chdir(tempMapsme)
+            os.chdir(tempOrganicmap)
 
-    # moving mapsme maps
+    # moving Organicmaps maps
     if status:
-        log('move mapsme map')
+        log('move Organicmaps map')
         for file in os.listdir(path):
             if file.endswith('.mwm'):
                 logging.info(file)
                 shutil.move(os.path.join(path, file),
-                            os.path.join(outMapsme, file))
-                mapsmeCount = mapsmeCount + 1
+                            os.path.join(outOrganicmaps, file))
+                organicmapsCount = organicmapsCount + 1
     else:
-        log('Not move mapsme map')
+        log('Not move Organicmaps map')
     os.chdir(currentDir)
-    moveCount = moveCount + mapsmeCount
+    moveCount = moveCount + organicmapsCount
 
-    return mapsmeCount
+    return organicmapsCount
 
 
 def moveOsmand():
@@ -411,18 +393,18 @@ def osmand():
         return 0
 
 
-def mapsme():
-    log('Start MAPSME map Creator')
-    os.chdir(os.path.join(mapsmeDir, 'omim/tools/python'))
-    print (len(mapsme_maps))
-    for map in mapsme_maps:
-        log('Start ' + str(map))
-        os.chdir(os.path.join(mapsmeDir, 'omim/tools/python'))
-        os.system('python3.6 -m maps_generator --countries="' + map + '" --skip="Coastline"')
-        moveMapsme()
-        clean()
+def organicmaps():
+    log('Start OrganicMaps map Creator')
+    os.chdir(os.path.join(organicmapDir, 'omim/tools/python'))
+    os.system('bash generate_map.sh')
+    moveOrganicmaps()
+    clean()
+    # for map in organicmap_maps:
+    #     log('Start ' + str(map))
+    #     os.chdir(os.path.join(organicmapDir, 'omim/tools/python'))
+
     os.chdir(currentDir)
-    log('Finish MAPSME maps')
+    log('Finish OrganicMaps maps')
 
 
 def garmin():
@@ -456,7 +438,7 @@ def main():
                 if split():
                     osmand()
                 garmin()
-            mapsme()
+            organicmaps()
             if(moveCount > 1):
                 writeVersion(dl)
                 log('Something done')
