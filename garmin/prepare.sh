@@ -22,10 +22,5 @@ mv split/splitter-*/* split
 rm -rf  split/splitter-*
 rm splitter-$SPLITTER_VER.tar.gz
 
-#wget http://osm.thkukuk.de/data/bounds-latest.zip
+wget http://osm.thkukuk.de/data/bounds-latest.zip -o bounds-latest.zip
 
-# mkdir bounds
-
-# unzip -q  bounds-latest.zip -d bounds
-
-# rm bounds-latest.zip
