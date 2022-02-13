@@ -395,7 +395,7 @@ def osmand():
 
 def organicmaps():
     log('Start OrganicMaps map Creator')
-    os.chdir(os.path.join(organicmapDir, 'omim/tools/python'))
+    os.chdir(organicmapDir)
     os.system('bash generate_map.sh')
     moveOrganicmaps()
     clean()
