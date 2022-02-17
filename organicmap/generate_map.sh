@@ -1,12 +1,30 @@
-MAPS_BUILD=/home/osm/dev/osmmapsconverter/organicmap/map_build
+#!/bin/bash
 
-chmod 0777 $MAPS_BUILD
+MAP_GENERATOR_INI=$HOME/organicmaps/tools/python/maps_generator/var/etc/map_generator.ini
+MAP_GENERATOR_INI_TEMPLATE=$HOME/map_generator.ini.template
 
-docker rm /organicmap_mapgenerator
+echo "[INFO] ENV:"
 
-docker run \
-  --name organicmap_mapgenerator \
-  --mount type=bind,source=$MAPS_BUILD,target=/organicmaps/maps_build \
-  organicmap:latest  \
-   --skip="Coastline,MwmStatistics" --countries="Belarus*"
+echo PLANET_URL=$PLANET_URL
+echo PLANET_MD5_URL=$PLANET_MD5_URL
+echo ORGANICMAP_COUNTRIES=$ORGANICMAP_COUNTRIES
+echo ORGANICMAP_SKIP=$ORGANICMAP_SKIP
+
+echo "[INFO] Change map_generator.ini:"
+
+envsubst < "$MAP_GENERATOR_INI_TEMPLATE" > "$MAP_GENERATOR_INI"
+
+cat $MAP_GENERATOR_INI
+
+
+echo "[INFO] Start generate"
+
+if [[ -n "$ORGANICMAP_COUNTRIES" && -n  "$ORGANICMAP_SKIP" ]]
+then
+    python3 -m maps_generator --skip="$ORGANICMAP_SKIP" --countries="$ORGANICMAP_COUNTRIES"
+else
+    echo "[INFO] Not all parameters"
+fi
+
+
 
