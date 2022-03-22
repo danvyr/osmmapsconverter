@@ -29,7 +29,7 @@ COPY organicmaps /organicmaps
 
 RUN echo "" | /organicmaps/configure.sh
 
-RUN /organicmaps/tools/unix/build_omim.sh -rs generator_tool 
+RUN /organicmaps/tools/unix/build_omim.sh -rs generator_tool world_roads_builder_tool
 
 
 

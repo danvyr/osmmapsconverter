@@ -10,6 +10,17 @@ echo PLANET_MD5_URL=$PLANET_MD5_URL
 echo ORGANICMAP_COUNTRIES=$ORGANICMAP_COUNTRIES
 echo ORGANICMAP_SKIP=$ORGANICMAP_SKIP
 
+if [[ -n "$SUBWAY_URL"  ]]
+then
+    echo "[INFO] using custom SUBWAY_URL:"
+    echo SUBWAY_URL=$SUBWAY_URL
+else
+    echo "[INFO] using default SUBWAY_URL:"
+    export SUBWAY_URL=https://cdn.organicmaps.app/subway.json
+    echo SUBWAY_URL=$SUBWAY_URL
+fi
+
+
 echo "[INFO] Change map_generator.ini:"
 
 envsubst < "$MAP_GENERATOR_INI_TEMPLATE" > "$MAP_GENERATOR_INI"
