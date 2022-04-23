@@ -20,6 +20,15 @@ else
     echo SUBWAY_URL=$SUBWAY_URL
 fi
 
+if [[ -n "$THREADS_COUNT"  ]]
+then
+    echo "[INFO] using custom THREADS_COUNT:"
+    echo THREADS_COUNT=$THREADS_COUNT
+else
+    echo "[INFO] using default THREADS_COUNT:"
+    export THREADS_COUNT=0
+    echo THREADS_COUNT=$THREADS_COUNT
+fi
 
 echo "[INFO] Change map_generator.ini:"
 
@@ -33,6 +42,7 @@ echo "[INFO] Start generate"
 if [[ -n "$ORGANICMAP_COUNTRIES" && -n  "$ORGANICMAP_SKIP" ]]
 then
     python3 -m maps_generator --skip="$ORGANICMAP_SKIP" --countries="$ORGANICMAP_COUNTRIES"
+    python3 $HOME/move_result.py
 else
     echo "[INFO] Not all parameters"
 fi

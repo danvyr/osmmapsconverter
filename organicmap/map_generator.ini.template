@@ -35,7 +35,7 @@ PLANET_URL: $PLANET_URL
 
 
 [Common]
-THREADS_COUNT: 0
+THREADS_COUNT: $THREADS_COUNT
 
 [Stats]
 STATS_TYPES_CONFIG: ${Developer:OMIM_PATH}/tools/python/maps_generator/var/etc/stats_types_config.txt

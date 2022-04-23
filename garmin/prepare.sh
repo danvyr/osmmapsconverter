@@ -7,7 +7,7 @@ SPLITTER_VER=latest
 wget http://www.mkgmap.org.uk/download/mkgmap-$MKGMAP_VER.tar.gz
 
 rm --rf mkgmap split temp
-mkdir mkgmap split temp #bounds sea
+mkdir mkgmap split temp
 
 tar -xf mkgmap-$MKGMAP_VER.tar.gz --directory mkgmap
 mv mkgmap/mkgmap-*/* mkgmap
@@ -22,5 +22,7 @@ mv split/splitter-*/* split
 rm -rf  split/splitter-*
 rm splitter-$SPLITTER_VER.tar.gz
 
-wget http://osm.thkukuk.de/data/bounds-latest.zip -o bounds-latest.zip
-
+rm -rf bounds*
+# wget http://osm.thkukuk.de/data/bounds-latest.zip -o bounds-latest.zip
+curl http://osm.thkukuk.de/data/bounds-latest.zip --output bounds-latest.zip
+curl http://osm.thkukuk.de/data/sea-latest.zip --output sea-latest.zip

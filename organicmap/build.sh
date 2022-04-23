@@ -30,6 +30,11 @@ echo "[INFO] GIT_TAG =  $GIT_TAG"
 
 docker build -t $IMAGE_NAME:latest -t $IMAGE_NAME:$IMAGE_DATE -t $IMAGE_NAME:$GIT_TAG  .
 
+echo "docker push $IMAGE_NAME:latest"
 docker push $IMAGE_NAME:latest
+
+echo "docker push $IMAGE_NAME:$IMAGE_DATE"
 docker push $IMAGE_NAME:$IMAGE_DATE
+
+echo "docker push $IMAGE_NAME:$GIT_TAG"
 docker push $IMAGE_NAME:$GIT_TAG

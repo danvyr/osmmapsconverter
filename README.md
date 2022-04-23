@@ -8,9 +8,11 @@ https://wiki.openstreetmap.org/wiki/OSM_Map_On_Garmin
 http://www.mkgmap.org.uk/download/mkgmap.html
 
 
-## Maps.me 
+## Organicmaps 
 
-https://github.com/mapsme/omim/tree/master/tools/python/maps_generator
+https://github.com/organicmaps/organicmaps/blob/master/docs/SUBWAY_GENERATION.md
+
+https://github.com/organicmaps/organicmaps/tree/master/tools/python/maps_generator
 
 ## OsmAnd
 
