@@ -39,7 +39,49 @@ organicmap_maps=[
              'Belarus_Maglieu Region',
              'Belarus_Vitebsk Region'
             ]
+countries = [
+    ["Belarus*",
+        "http://download.geofabrik.de/europe/belarus-latest.osm.pbf"],
+#    ["Ukraine*",
+#        "http://download.geofabrik.de/europe/ukraine-latest.osm.pbf"],
 
+#    ["Poland*",
+#        "http://download.geofabrik.de/europe/poland-latest.osm.pbf"],
+
+    ["Poland_Lower Silesian Voivodeship",
+        "http://download.geofabrik.de/europe/poland/dolnoslaskie-latest.osm.pbf"],
+    ["Poland_Masovian Voivodeship",
+        "http://download.geofabrik.de/europe/poland/mazowieckie-latest.osm.pbf"],
+    ["Poland_Kuyavian-Pomeranian Voivodeship",
+        "http://download.geofabrik.de/europe/poland/kujawsko-pomorskie-latest.osm.pbf"],
+    ["Poland_Lodz Voivodeship",
+        "http://download.geofabrik.de/europe/poland/lodzkie-latest.osm.pbf"],
+    ["Poland_Lublin Voivodeship",
+        "http://download.geofabrik.de/europe/poland/lubelskie-latest.osm.pbf"],
+    ["Poland_Lubusz Voivodeship",
+        "http://download.geofabrik.de/europe/poland/lubuskie-latest.osm.pbf"],
+    ["Poland_Lesser Poland Voivodeship",
+        "http://download.geofabrik.de/europe/poland/malopolskie-latest.osm.pbf"],
+    ["Poland_Opole Voivodeship",
+        "http://download.geofabrik.de/europe/poland/opolskie-latest.osm.pbf"],
+    ["Poland_Subcarpathian Voivodeship",
+        "http://download.geofabrik.de/europe/poland/podkarpackie-latest.osm.pbf"],
+    ["Poland_Podlaskie Voivodeship",
+        "http://download.geofabrik.de/europe/poland/podlaskie-latest.osm.pbf"],
+    ["Poland_Pomeranian Voivodeship",
+        "http://download.geofabrik.de/europe/poland/pomorskie-latest.osm.pbf"],
+    ["Poland_Silesian Voivodeship",
+        "http://download.geofabrik.de/europe/poland/slaskie-latest.osm.pbf"],
+    ["Poland_Swietokrzyskie Voivodeship",
+        "http://download.geofabrik.de/europe/poland/swietokrzyskie-latest.osm.pbf"],
+    ["Poland_Warmian-Masurian Voivodeship",
+        "http://download.geofabrik.de/europe/poland/warminsko-mazurskie-latest.osm.pbf"],
+    ["Poland_Greater Poland Voivodeship",
+        "http://download.geofabrik.de/europe/poland/wielkopolskie-latest.osm.pbf"],
+    ["Poland_West Pomeranian Voivodeship",
+        "http://download.geofabrik.de/europe/poland/zachodniopomorskie-latest.osm.pbf"],
+
+]
 
 user = 'osm'
 javaOpt = ' -Xms128M -Xmx3200M '
@@ -87,6 +129,15 @@ def run_command(command):
     log (command)
     os.system(command)
 
+
+def run_docker(command):
+    print("RUN COMAND")
+    os.system("docker rm "+ command[2])
+    print (command[0])
+    logging.info(str(command))
+    os.system(command[0])
+    clean(command[1])
+    os.system("docker rm "+ command[2])
 
 def nowtime():
     return datetime.today().strftime('%H-%M-%S: ')
@@ -392,19 +443,57 @@ def osmand():
         log("Unexpected error:"+ sys.exc_info()[0])
         return 0
 
-
 def organicmaps():
-    log('Start OrganicMaps map Creator')
-    os.chdir(organicmapDir)
-    os.system('bash generate_map.sh')
-    moveOrganicmaps()
-    clean()
-    # for map in organicmap_maps:
-    #     log('Start ' + str(map))
-    #     os.chdir(os.path.join(organicmapDir, 'omim/tools/python'))
+    print("gen")
+    cmd_rm = "docker rm /organicmap_mapgenerator "
 
-    os.chdir(currentDir)
-    log('Finish OrganicMaps maps')
+    pool = Pool(cpu_count())
+    try:
+        cmds = []
+        i=0
+        for map_name, map_url in countries:
+            print(map_name + " " + map_url)
+            MAPS_BUILD=MAPS_BUILD_DEF + '/' + str(i)
+            CONTAINER_NAME="oranic_generator_"+ str(i)
+            os.system("mkdir -p "+ MAPS_BUILD)
+
+            cmd = "docker run   " + \
+            "--mount type=bind,source=" + MAPS_BUILD + ",target=/organicmaps/maps_build " + \
+            "--mount type=bind,source="+ outOrganicmaps +",target=/organicmaps/out " + \
+            "-e PLANET_URL='" + map_url + "'  " + \
+            "-e PLANET_MD5_URL='" + map_url + ".md5' " + \
+            "-e ORGANICMAP_COUNTRIES='" + map_name + "' " + \
+            "-e ORGANICMAP_SKIP='Coastline,MwmStatistics' " + \
+            "-e THREADS_COUNT=1 "+ \
+            "--name " + CONTAINER_NAME + " danvyr/organicmap:latest"
+
+            cmds.append([cmd, MAPS_BUILD, CONTAINER_NAME])
+            i+=1
+
+        logging.info(str(cmds))
+
+        print (cmds)
+        print ("START")
+        pool.map(run_docker, cmds)
+        pool.close()
+        pool.join()
+
+    except:
+        pass
+
+
+# def organicmaps():
+#     log('Start OrganicMaps map Creator')
+#     os.chdir(organicmapDir)
+#     os.system('bash generate_map.sh')
+#     moveOrganicmaps()
+#     clean()
+#     # for map in organicmap_maps:
+#     #     log('Start ' + str(map))
+#     #     os.chdir(os.path.join(organicmapDir, 'omim/tools/python'))
+
+#     os.chdir(currentDir)
+#     log('Finish OrganicMaps maps')
 
 
 def garmin():
@@ -419,7 +508,7 @@ def garmin():
 
 def main():
  #   prepare():
-
+    split()
 
     log('Started')
 
