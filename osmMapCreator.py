@@ -508,7 +508,6 @@ def garmin():
 
 def main():
  #   prepare():
-    split()
 
     log('Started')
 
