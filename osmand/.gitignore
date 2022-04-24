@@ -7,3 +7,6 @@ logging.properties
 utilities.*
 OsmAndMapCreator-main.zip
 OsmAndMapCreator/
+nodes.tmp.odb
+regions.ocbf
+
