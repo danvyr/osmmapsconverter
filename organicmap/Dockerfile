@@ -70,7 +70,7 @@ COPY --chown=$USER --from=builder /organicmaps/tools/python       $HOME_DIR/orga
 COPY --chown=$USER --from=builder /organicmaps/data               $HOME_DIR/organicmaps/data
 COPY --chown=$USER --from=builder /omim-build-release             $HOME_DIR/omim-build-release
 
-RUN pip3 install -r $HOME_DIR/organicmaps/tools/python/maps_generator/requirements.txt && 
+RUN pip3 install -r $HOME_DIR/organicmaps/tools/python/maps_generator/requirements.txt
 
 COPY --chown=$USER   map_generator.ini.template     $HOME_DIR/
 COPY --chown=$USER   generate_map.sh                $HOME_DIR/

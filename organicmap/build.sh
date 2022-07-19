@@ -5,28 +5,34 @@ IMAGE_NAME="danvyr/organicmap"
 IMAGE_DATE=`date '+%Y%m%d'`
 
 echo "[INFO] IMAGE_DATE = $IMAGE_DATE"
-if [ -d "organicmaps" ] 
+if [ -f "organicmaps/README.md" ]
 then
-    echo "[INFO] organicmaps exists"    
+    echo "[INFO] organicmaps exists"
+    pwd
     cd organicmaps
-    echo "[INFO] update organicmaps" 
+    pwd
+    echo "[INFO] update organicmaps"
     git pull
-    echo "[INFO] update submodule" 
+    echo "[INFO] update submodule"
     git submodule update --init --recursive
-    echo "[INFO] update complete" 
+    echo "[INFO] update complete"
     GIT_TAG=`git rev-parse --short HEAD`
     cd ..
+    pwd
 else
     echo "[INFO] organicmaps does not exists."
-    git clone -b master --single-branch --recurse-submodules -j8  https://github.com/organicmaps/organicmaps.git 
-    echo "[INFO] update complete" 
+    git clone -b master --single-branch --recurse-submodules -j8  https://github.com/organicmaps/organicmaps.git
+    echo "[INFO] update complete"
+    pwd
     cd organicmaps
+    pwd
     GIT_TAG=`git rev-parse --short HEAD`
     cd ..
+    pwd
 fi
 
 
-echo "[INFO] GIT_TAG =  $GIT_TAG"  
+echo "[INFO] GIT_TAG =  $GIT_TAG"
 
 docker build -t $IMAGE_NAME:latest -t $IMAGE_NAME:$IMAGE_DATE -t $IMAGE_NAME:$GIT_TAG  .
 
@@ -38,3 +44,4 @@ docker push $IMAGE_NAME:$IMAGE_DATE
 
 echo "docker push $IMAGE_NAME:$GIT_TAG"
 docker push $IMAGE_NAME:$GIT_TAG
+
