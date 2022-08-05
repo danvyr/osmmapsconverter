@@ -22,6 +22,7 @@ from multiprocessing import Pool
 # from multiprocessing.dummy import Pool as ThreadPool
 
 from multiprocessing import cpu_count
+MAPS_BUILD_DEF = "/home/osm/dev/osmmapsconverter/organicmap/map_build"
 
 urls = {
     'osmandcreator': 'https://download.osmand.net/latest-night-build/OsmAndMapCreator-main.zip',
@@ -444,9 +445,9 @@ def osmand():
         return 0
 
 def organicmaps():
-    print("gen")
+    print("[INFO] organicmaps")
     cmd_rm = "docker rm /organicmap_mapgenerator "
-
+    print("[INFO] organicmaps pool")
     pool = Pool(cpu_count())
     try:
         cmds = []
@@ -466,7 +467,7 @@ def organicmaps():
             "-e ORGANICMAP_SKIP='Coastline,MwmStatistics' " + \
             "-e THREADS_COUNT=1 "+ \
             "--name " + CONTAINER_NAME + " danvyr/organicmap:latest"
-
+            print(cmd)
             cmds.append([cmd, MAPS_BUILD, CONTAINER_NAME])
             i+=1
 
@@ -478,8 +479,15 @@ def organicmaps():
         pool.close()
         pool.join()
 
+    except OSError as err:
+        log("OS error: {0}".format(err))
+        return 0
+    except ValueError:
+        log("Could not convert data to an integer.")
+        return 0
     except:
-        pass
+        log("Unexpected error:"+ sys.exc_info()[0])
+        return 0
 
 
 # def organicmaps():
@@ -521,11 +529,11 @@ def main():
 
         if checkVersion(dl):
             log('Run ')
-            if(download()):
-                log('downloaded')
-                if split():
-                    osmand()
-                garmin()
+#            if(download()):
+#                log('downloaded')
+#                if split():
+#                    osmand()
+#                garmin()
             organicmaps()
             if(moveCount > 1):
                 writeVersion(dl)
