@@ -374,7 +374,7 @@ def download():
                 log('all downloaded')
                 return 1
             else:
-               return 0
+                return 0
 
     except:
         log('downloading failed')
@@ -466,10 +466,11 @@ def organicmaps():
             "-e ORGANICMAP_COUNTRIES='" + map_name + "' " + \
             "-e ORGANICMAP_SKIP='Coastline,MwmStatistics' " + \
             "-e THREADS_COUNT=1 "+ \
-            "--name " + CONTAINER_NAME + " danvyr/organicmap:latest"
+            "--name " + CONTAINER_NAME + " 9e0bf3776498 " #danvyr/organicmap:latest"
             print(cmd)
             cmds.append([cmd, MAPS_BUILD, CONTAINER_NAME])
             i+=1
+#            "-e SUBWAY_URL='https://download.openstreetmap.by/subway.json'  " + \
 
         logging.info(str(cmds))
 
@@ -518,7 +519,7 @@ def main():
  #   prepare():
 
     log('Started')
-
+    clean()
     if readStatus() == 'finished':
         writeStatus('running')
         checkDirs()
@@ -529,11 +530,12 @@ def main():
 
         if checkVersion(dl):
             log('Run ')
-#            if(download()):
-#                log('downloaded')
-#                if split():
-#                    osmand()
-#                garmin()
+            writeStatus('running')
+            if(download()):
+                log('downloaded')
+                if split():
+                    osmand()
+                garmin()
             organicmaps()
             if(moveCount > 1):
                 writeVersion(dl)
