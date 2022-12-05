@@ -193,7 +193,6 @@ java -jar mkgmap/mkgmap.jar \
 
 mv $TEMP_DIR/gmapsupp.img $TEMP_DIR/"$NAME"_generic_new.img
 
-rm temp/Belarus_map_routes_bicycle.img
 mv temp/Belarus_map_* /var/www/maps/garmin/
 
 
@@ -375,5 +374,4 @@ java -jar mkgmap/mkgmap.jar \
 
 mv $TEMP_DIR/gmapsupp.img $TEMP_DIR/"$NAME"_generic_new_ru.img
 
-rm temp/Belarus_map_routes_bicycle.img
 mv temp/Belarus_map_* /var/www/maps/garmin/
