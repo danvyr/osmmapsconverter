@@ -195,3 +195,185 @@ mv $TEMP_DIR/gmapsupp.img $TEMP_DIR/"$NAME"_generic_new.img
 
 rm temp/Belarus_map_routes_bicycle.img
 mv temp/Belarus_map_* /var/www/maps/garmin/
+
+
+PBF_FILE=/var/www/maps/belarus-ru.osm.pbf
+STYLES=styles
+BOUNDS=bounds-latest.zip
+
+TEMPLATE_ARGS="$TEMP_DIR/template.args"
+STRANGER_STYLE_FILE="$STYLES/my_stranger/"
+STRANGER_TYP="$STYLES/my_stranger.typ"
+GENERIC_STYLE_FILE="$STYLES/generic_new/"
+GENERIC_TYP="$STYLES/generic_new.typ"
+
+DATE=`date +%F`
+NAME="Belarus_map_ru"
+
+echo "TEMP_DIR = $TEMP_DIR "
+echo "STYLES = $STYLES "
+echo "BOUNDS = $BOUNDS "
+echo "STRANGER_STYLE_FILE = $STRANGER_STYLE_FILE "
+echo "TEMPLATE_ARGS = $TEMPLATE_ARGS "
+echo "STRANGER_TYP = $STRANGER_TYP "
+echo "DATE = $DATE"
+
+
+
+
+java -jar split/splitter.jar \
+    --max-nodes=1200000 \
+    --overlap=12000 \
+    --keep-complete=false \
+    --output=pbf \
+    --output-dir=$TEMP_DIR \
+    $PBF_FILE
+
+
+
+COUNTRY_NAME=Belarus
+COUNTRY_ABBR=BY
+
+FAMILY_ID=5050
+MAPNAME=80808080
+PRODUCT_ID=1
+
+java -jar mkgmap/mkgmap.jar \
+    --route --add-pois-to-areas \
+    --index  \
+    --bounds=$BOUNDS \
+    --gmapsupp \
+    --name-tag-list=name,name:ru,name:be,int_name \
+    --mapname=$MAPNAME \
+    --family-id=$FAMILY_ID \
+    --product-id=$PRODUCT_ID \
+    --series-name="OpenStreetMap.by" \
+    --family-name="OpenStreetMap.by" \
+    --link-pois-to-ways \
+    --country-name=$COUNTRY_NAME \
+    --country-abbr=$COUNTRY_ABBR  \
+    --description="Belarus_general, v.$DATE" \
+    --output-dir=$TEMP_DIR \
+    -c $TEMPLATE_ARGS
+
+mv $TEMP_DIR/gmapsupp.img $TEMP_DIR/"$NAME"_general_ru.img
+
+
+FAMILY_ID=5051
+MAPNAME=80818081
+PRODUCT_ID=2
+
+java -jar mkgmap/mkgmap.jar \
+    --verbose \
+    --output-dir=$TEMP_DIR \
+    --gmapsupp \
+    --tdbfile \
+    --series-name="OpenStreetMap.by" \
+    --family-name="OpenStreetMap.by" \
+    --description="Belarus_routes-bicycle, v.$DATE" \
+    --country-name=$COUNTRY_NAME \
+    --country-abbr=$COUNTRY_ABBR \
+    --charset=cp1251 \
+    --code-page=1251 \
+    --lower-case \
+    --name-tag-list=name,name:ru,name:be,int_name \
+    --style=routes-bicycle \
+    --remove-short-arcs \
+    --drive-on=right \
+    --check-roundabouts \
+    --mapname=$MAPNAME \
+    --family-id=$FAMILY_ID \
+    --product-id=$PRODUCT_ID \
+    --make-poi-index \
+    --index \
+    --poi-address \
+    --route \
+    --draw-priority=31 \
+    --bounds=$BOUNDS \
+    --housenumbers \
+    --add-pois-to-areas \
+    -c $TEMPLATE_ARGS  $GENERIC_TYP
+    
+
+mv $TEMP_DIR/gmapsupp.img $TEMP_DIR/"$NAME"_routes_bicycle_ru.img
+
+
+FAMILY_ID=5052
+MAPNAME=80828082
+PRODUCT_ID=3
+
+java -jar mkgmap/mkgmap.jar \
+    --verbose \
+    --output-dir=$TEMP_DIR \
+    --gmapsupp \
+    --tdbfile \
+    --series-name="OpenStreetMap.by" \
+    --family-name="OpenStreetMap.by" \
+    --family-name="OpenStreetMap + ST-GIS by Maks Vasilev" \
+    --description="Belarus_velo100, v.$DATE" \
+    --country-name=$COUNTRY_NAME \
+    --country-abbr=$COUNTRY_ABBR \
+    --copyright-message="OpenStreetMap CC-BY-SA 2.0, ST-GIS CC-BY-SA 3.0, ST-GIS, Maks Vasilev" \
+    --charset=cp1251 \
+    --code-page=1251 \
+    --lower-case \
+    --name-tag-list=name,name:ru,name:be,int_name \
+    --style-file=$STRANGER_STYLE_FILE \
+    --remove-short-arcs \
+    --drive-on=right \
+    --check-roundabouts \
+    --mapname=$MAPNAME \
+    --family-id=$FAMILY_ID \
+    --product-id=$PRODUCT_ID \
+    --make-poi-index \
+    --index \
+    --poi-address \
+    --route \
+    --draw-priority=31 \
+    --bounds=$BOUNDS \
+    --housenumbers \
+    --add-pois-to-areas \
+    -c $TEMPLATE_ARGS  $STRANGER_TYP
+mv $TEMP_DIR/gmapsupp.img $TEMP_DIR/"$NAME"_stranger_ru.img
+
+
+FAMILY_ID=5053
+MAPNAME=80838083
+PRODUCT_ID=4
+
+java -jar mkgmap/mkgmap.jar \
+    --verbose \
+    --output-dir=$TEMP_DIR \
+    --gmapsupp \
+    --tdbfile \
+    --series-name="OpenStreetMap.by" \
+    --family-name="OpenStreetMap.by" \
+    --description="Belarus_generic_new, v.$DATE" \
+    --country-name=$COUNTRY_NAME \
+    --country-abbr=$COUNTRY_ABBR \
+    --charset=cp1251 \
+    --code-page=1251 \
+    --lower-case \
+    --name-tag-list=name,name:ru,name:be,int_name \
+    --style-file=$GENERIC_STYLE_FILE \
+    --remove-short-arcs \
+    --drive-on=right \
+    --check-roundabouts \
+    --mapname=$MAPNAME \
+    --family-id=$FAMILY_ID \
+    --product-id=$PRODUCT_ID \
+    --make-poi-index \
+    --index \
+    --poi-address \
+    --route \
+    --draw-priority=31 \
+    --bounds=$BOUNDS \
+    --housenumbers \
+    --add-pois-to-areas \
+    -c $TEMPLATE_ARGS  $GENERIC_TYP
+
+
+mv $TEMP_DIR/gmapsupp.img $TEMP_DIR/"$NAME"_generic_new_ru.img
+
+rm temp/Belarus_map_routes_bicycle.img
+mv temp/Belarus_map_* /var/www/maps/garmin/
