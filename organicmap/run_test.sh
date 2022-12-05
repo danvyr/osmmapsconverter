@@ -1,12 +1,12 @@
 #!/bin/bash
 
-MAPS_BUILD=/home/osm/dev/osmmapsconverter/organicmap/map_build
-MAPS_OUT=/var/www/maps/organicmap
+MAPS_BUILD=~/dev/osmmapsconverter/organicmap/map_build
+MAPS_OUT=~/dev/osmmapsconverter/organicmap
 
 chmod 0777 $MAPS_BUILD
 
-DOCKER_IMAGE=9e0bf3776498
-#DOCKER_IMAGE=danvyr/organicmap:latest
+# DOCKER_IMAGE=9e0bf3776498
+DOCKER_IMAGE=danvyr/organicmap:latest
 
 CONTAINER_NAME=organicmap_mapgenerator_silezian
 
@@ -23,7 +23,7 @@ docker run  -t -i \
 -e ORGANICMAP_COUNTRIES="$COUNTRIES" \
 -e SUBWAY_URL='https://cdn.organicmaps.app/subway.json' \
 -e ORGANICMAP_SKIP='Coastline,MwmStatistics' \
--e THREADS_COUNT=1 \
+-e THREADS_COUNT=8 \
 --name $CONTAINER_NAME $DOCKER_IMAGE
 #danvyr/organicmap:latest
 #
