@@ -519,7 +519,7 @@ def convertRus():
         log(map_name)
         pathToFile = os.path.join(inputDir, map_name + '.osm.pbf')
         pathToRuFile = os.path.join(inputDir, map_name + '-ru.osm.pbf')
-        os.system('python3 rus/osm_back.py -l ru -o ' pathToRuFile + ' ' + pathToFile) 
+        os.system('python3 rus/osm_back.py -l ru -o ' + pathToRuFile + ' ' + pathToFile) 
     
 
 def main():
