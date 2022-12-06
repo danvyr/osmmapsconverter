@@ -2,6 +2,7 @@
 
 TEMP_DIR=temp
 PBF_FILE=../in/belarus.osm.pbf
+PBF_FILE_RU=/var/www/maps/belarus-ru.osm.pbf
 #PBF_FILE=~/belarus-latest-internal.osm.pbf
 #PBF_FILE=../in/belarus-latest.osm.pbf
 STYLES=styles
@@ -59,6 +60,8 @@ java -jar mkgmap/mkgmap.jar \
     --output-dir=$TEMP_DIR \
     -c $TEMPLATE_ARGS
 
+
+echo "[INFO] Move result files $NAME"
 mv $TEMP_DIR/gmapsupp.img $TEMP_DIR/"$NAME"_general.img
 
 
@@ -113,6 +116,7 @@ java -jar mkgmap/mkgmap.jar \
 #     --output-dir=$TEMP_DIR \
 #     -c $TEMPLATE_ARGS
 
+echo "[INFO] Move result files $NAME"
 mv $TEMP_DIR/gmapsupp.img $TEMP_DIR/"$NAME"_routes_bicycle.img
 
 
@@ -152,6 +156,8 @@ java -jar mkgmap/mkgmap.jar \
     --housenumbers \
     --add-pois-to-areas \
     -c $TEMPLATE_ARGS  $STRANGER_TYP
+
+echo "[INFO] Move result files $NAME"
 mv $TEMP_DIR/gmapsupp.img $TEMP_DIR/"$NAME"_stranger.img
 
 
@@ -190,13 +196,17 @@ java -jar mkgmap/mkgmap.jar \
     --add-pois-to-areas \
     -c $TEMPLATE_ARGS  $GENERIC_TYP
 
+echo "[INFO] Move result files $NAME"
 
 mv $TEMP_DIR/gmapsupp.img $TEMP_DIR/"$NAME"_generic_new.img
 
 mv temp/Belarus_map_* /var/www/maps/garmin/
 
+echo "[INFO] Delete temp files"
+rm -rf  $TEMP_DIR/*
 
-PBF_FILE=/var/www/maps/belarus-ru.osm.pbf
+
+PBF_FILE=$PBF_FILE_RU
 STYLES=styles
 BOUNDS=bounds-latest.zip
 
@@ -216,8 +226,6 @@ echo "STRANGER_STYLE_FILE = $STRANGER_STYLE_FILE "
 echo "TEMPLATE_ARGS = $TEMPLATE_ARGS "
 echo "STRANGER_TYP = $STRANGER_TYP "
 echo "DATE = $DATE"
-
-
 
 
 java -jar split/splitter.jar \
@@ -255,6 +263,8 @@ java -jar mkgmap/mkgmap.jar \
     --output-dir=$TEMP_DIR \
     -c $TEMPLATE_ARGS
 
+
+echo "[INFO] Move result files $NAME"
 mv $TEMP_DIR/gmapsupp.img $TEMP_DIR/"$NAME"_general_ru.img
 
 
@@ -294,6 +304,7 @@ java -jar mkgmap/mkgmap.jar \
     -c $TEMPLATE_ARGS  $GENERIC_TYP
     
 
+echo "[INFO] Move result files $NAME"
 mv $TEMP_DIR/gmapsupp.img $TEMP_DIR/"$NAME"_routes_bicycle_ru.img
 
 
@@ -333,6 +344,9 @@ java -jar mkgmap/mkgmap.jar \
     --housenumbers \
     --add-pois-to-areas \
     -c $TEMPLATE_ARGS  $STRANGER_TYP
+
+
+echo "[INFO] Move result files $NAME"
 mv $TEMP_DIR/gmapsupp.img $TEMP_DIR/"$NAME"_stranger_ru.img
 
 
@@ -372,6 +386,10 @@ java -jar mkgmap/mkgmap.jar \
     -c $TEMPLATE_ARGS  $GENERIC_TYP
 
 
+echo "[INFO] Move result files $NAME"
 mv $TEMP_DIR/gmapsupp.img $TEMP_DIR/"$NAME"_generic_new_ru.img
 
 mv temp/Belarus_map_* /var/www/maps/garmin/
+
+echo "[INFO] Delete temp files"
+rm -rf  $TEMP_DIR/*
