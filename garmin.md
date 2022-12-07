@@ -14,3 +14,8 @@ https://github.com/ligfietser/mkgmap-style-sheets
 
 
 https://www.openstreetmap.org/user/LLlypuk82/diary/44136
+
+
+
+
+https://github.com/liosha/osm2mp

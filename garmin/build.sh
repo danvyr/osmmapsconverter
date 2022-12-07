@@ -69,36 +69,36 @@ FAMILY_ID=5051
 MAPNAME=80818081
 PRODUCT_ID=2
 
-java -jar mkgmap/mkgmap.jar \
-    --verbose \
-    --output-dir=$TEMP_DIR \
-    --gmapsupp \
-    --tdbfile \
-    --series-name="OpenStreetMap.by" \
-    --family-name="OpenStreetMap.by" \
-    --description="Belarus_routes-bicycle, v.$DATE" \
-    --country-name=$COUNTRY_NAME \
-    --country-abbr=$COUNTRY_ABBR \
-    --charset=cp1251 \
-    --code-page=1251 \
-    --lower-case \
-    --name-tag-list=name,name:ru,name:be,int_name \
-    --style=routes-bicycle \
-    --remove-short-arcs \
-    --drive-on=right \
-    --check-roundabouts \
-    --mapname=$MAPNAME \
-    --family-id=$FAMILY_ID \
-    --product-id=$PRODUCT_ID \
-    --make-poi-index \
-    --index \
-    --poi-address \
-    --route \
-    --draw-priority=31 \
-    --bounds=$BOUNDS \
-    --housenumbers \
-    --add-pois-to-areas \
-    -c $TEMPLATE_ARGS  $GENERIC_TYP
+# java -jar mkgmap/mkgmap.jar \
+#     --verbose \
+#     --output-dir=$TEMP_DIR \
+#     --gmapsupp \
+#     --tdbfile \
+#     --series-name="OpenStreetMap.by" \
+#     --family-name="OpenStreetMap.by" \
+#     --description="Belarus_routes-bicycle, v.$DATE" \
+#     --country-name=$COUNTRY_NAME \
+#     --country-abbr=$COUNTRY_ABBR \
+#     --charset=cp1251 \
+#     --code-page=1251 \
+#     --lower-case \
+#     --name-tag-list=name,name:ru,name:be,int_name \
+#     --style=routes-bicycle \
+#     --remove-short-arcs \
+#     --drive-on=right \
+#     --check-roundabouts \
+#     --mapname=$MAPNAME \
+#     --family-id=$FAMILY_ID \
+#     --product-id=$PRODUCT_ID \
+#     --make-poi-index \
+#     --index \
+#     --poi-address \
+#     --route \
+#     --draw-priority=31 \
+#     --bounds=$BOUNDS \
+#     --housenumbers \
+#     --add-pois-to-areas \
+#     -c $TEMPLATE_ARGS  $GENERIC_TYP
     
 # java -jar mkgmap/mkgmap.jar \
 #     --route --add-pois-to-areas \
@@ -116,8 +116,8 @@ java -jar mkgmap/mkgmap.jar \
 #     --output-dir=$TEMP_DIR \
 #     -c $TEMPLATE_ARGS
 
-echo "[INFO] Move result files $NAME"
-mv $TEMP_DIR/gmapsupp.img $TEMP_DIR/"$NAME"_routes_bicycle.img
+# echo "[INFO] Move result files $NAME"
+# mv $TEMP_DIR/gmapsupp.img $TEMP_DIR/"$NAME"_routes_bicycle.img
 
 
 FAMILY_ID=5052
@@ -217,7 +217,7 @@ GENERIC_STYLE_FILE="$STYLES/generic_new/"
 GENERIC_TYP="$STYLES/generic_new.typ"
 
 DATE=`date +%F`
-NAME="Belarus_map_ru"
+NAME="Belarus_map"
 
 echo "TEMP_DIR = $TEMP_DIR "
 echo "STYLES = $STYLES "
@@ -272,40 +272,40 @@ FAMILY_ID=5051
 MAPNAME=80818081
 PRODUCT_ID=2
 
-java -jar mkgmap/mkgmap.jar \
-    --verbose \
-    --output-dir=$TEMP_DIR \
-    --gmapsupp \
-    --tdbfile \
-    --series-name="OpenStreetMap.by" \
-    --family-name="OpenStreetMap.by" \
-    --description="Belarus_routes-bicycle, v.$DATE" \
-    --country-name=$COUNTRY_NAME \
-    --country-abbr=$COUNTRY_ABBR \
-    --charset=cp1251 \
-    --code-page=1251 \
-    --lower-case \
-    --name-tag-list=name,name:ru,name:be,int_name \
-    --style=routes-bicycle \
-    --remove-short-arcs \
-    --drive-on=right \
-    --check-roundabouts \
-    --mapname=$MAPNAME \
-    --family-id=$FAMILY_ID \
-    --product-id=$PRODUCT_ID \
-    --make-poi-index \
-    --index \
-    --poi-address \
-    --route \
-    --draw-priority=31 \
-    --bounds=$BOUNDS \
-    --housenumbers \
-    --add-pois-to-areas \
-    -c $TEMPLATE_ARGS  $GENERIC_TYP
+# java -jar mkgmap/mkgmap.jar \
+#     --verbose \
+#     --output-dir=$TEMP_DIR \
+#     --gmapsupp \
+#     --tdbfile \
+#     --series-name="OpenStreetMap.by" \
+#     --family-name="OpenStreetMap.by" \
+#     --description="Belarus_routes-bicycle, v.$DATE" \
+#     --country-name=$COUNTRY_NAME \
+#     --country-abbr=$COUNTRY_ABBR \
+#     --charset=cp1251 \
+#     --code-page=1251 \
+#     --lower-case \
+#     --name-tag-list=name,name:ru,name:be,int_name \
+#     --style=routes-bicycle \
+#     --remove-short-arcs \
+#     --drive-on=right \
+#     --check-roundabouts \
+#     --mapname=$MAPNAME \
+#     --family-id=$FAMILY_ID \
+#     --product-id=$PRODUCT_ID \
+#     --make-poi-index \
+#     --index \
+#     --poi-address \
+#     --route \
+#     --draw-priority=31 \
+#     --bounds=$BOUNDS \
+#     --housenumbers \
+#     --add-pois-to-areas \
+#     -c $TEMPLATE_ARGS  $GENERIC_TYP
     
 
-echo "[INFO] Move result files $NAME"
-mv $TEMP_DIR/gmapsupp.img $TEMP_DIR/"$NAME"_routes_bicycle_ru.img
+# echo "[INFO] Move result files $NAME"
+# mv $TEMP_DIR/gmapsupp.img $TEMP_DIR/"$NAME"_routes_bicycle_ru.img
 
 
 FAMILY_ID=5052
