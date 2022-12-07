@@ -27,8 +27,7 @@ echo "DATE = $DATE"
 
 java -jar split/splitter.jar \
     --max-nodes=1200000 \
-    --overlap=12000 \
-    --keep-complete=false \
+    --keep-complete=true \
     --output=pbf \
     --output-dir=$TEMP_DIR \
     $PBF_FILE
@@ -79,7 +78,6 @@ PRODUCT_ID=2
 #     --description="Belarus_routes-bicycle, v.$DATE" \
 #     --country-name=$COUNTRY_NAME \
 #     --country-abbr=$COUNTRY_ABBR \
-#     --charset=cp1251 \
 #     --code-page=1251 \
 #     --lower-case \
 #     --name-tag-list=name,name:ru,name:be,int_name \
@@ -136,7 +134,6 @@ java -jar mkgmap/mkgmap.jar \
     --country-name=$COUNTRY_NAME \
     --country-abbr=$COUNTRY_ABBR \
     --copyright-message="OpenStreetMap CC-BY-SA 2.0, ST-GIS CC-BY-SA 3.0, ST-GIS, Maks Vasilev" \
-    --charset=cp1251 \
     --code-page=1251 \
     --lower-case \
     --name-tag-list=name,name:ru,name:be,int_name \
@@ -175,7 +172,6 @@ java -jar mkgmap/mkgmap.jar \
     --description="Belarus_generic_new, v.$DATE" \
     --country-name=$COUNTRY_NAME \
     --country-abbr=$COUNTRY_ABBR \
-    --charset=cp1251 \
     --code-page=1251 \
     --lower-case \
     --name-tag-list=name,name:ru,name:be,int_name \
@@ -230,8 +226,7 @@ echo "DATE = $DATE"
 
 java -jar split/splitter.jar \
     --max-nodes=1200000 \
-    --overlap=12000 \
-    --keep-complete=false \
+    --keep-complete=true \
     --output=pbf \
     --output-dir=$TEMP_DIR \
     $PBF_FILE
@@ -282,7 +277,6 @@ PRODUCT_ID=2
 #     --description="Belarus_routes-bicycle, v.$DATE" \
 #     --country-name=$COUNTRY_NAME \
 #     --country-abbr=$COUNTRY_ABBR \
-#     --charset=cp1251 \
 #     --code-page=1251 \
 #     --lower-case \
 #     --name-tag-list=name,name:ru,name:be,int_name \
@@ -324,7 +318,6 @@ java -jar mkgmap/mkgmap.jar \
     --country-name=$COUNTRY_NAME \
     --country-abbr=$COUNTRY_ABBR \
     --copyright-message="OpenStreetMap CC-BY-SA 2.0, ST-GIS CC-BY-SA 3.0, ST-GIS, Maks Vasilev" \
-    --charset=cp1251 \
     --code-page=1251 \
     --lower-case \
     --name-tag-list=name,name:ru,name:be,int_name \
@@ -364,7 +357,6 @@ java -jar mkgmap/mkgmap.jar \
     --description="Belarus_generic_new, v.$DATE" \
     --country-name=$COUNTRY_NAME \
     --country-abbr=$COUNTRY_ABBR \
-    --charset=cp1251 \
     --code-page=1251 \
     --lower-case \
     --name-tag-list=name,name:ru,name:be,int_name \
