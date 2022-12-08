@@ -515,11 +515,13 @@ def garmin():
     moveGarmin()
 
 def convertRus():
+    log('Convert rus')
     for map_name, url_to_map in urls['maps'].items():
         log(map_name)
         pathToFile = os.path.join(inputDir, map_name + '.osm.pbf')
         pathToRuFile = os.path.join(outDir, map_name + '-ru.osm.pbf')
         os.system('python3 rus/osm_back.py -l ru -o ' + pathToRuFile + ' ' + pathToFile)
+    log('END convert rus')
 
 
     
@@ -546,7 +548,7 @@ def main():
                 if split():
                     osmand()
                 garmin()
-            organicmaps()
+            # organicmaps()
             if(moveCount > 1):
                 writeVersion(dl)
                 log('Something done')
