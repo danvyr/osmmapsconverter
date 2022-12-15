@@ -1,12 +1,23 @@
 #!/bin/sh
 
 TEMP_DIR=temp
-PBF_FILE=../in/belarus.osm.pbf
+PBF_FILE=$1
 PBF_FILE_RU=/var/www/maps/belarus-ru.osm.pbf
 #PBF_FILE=~/belarus-latest-internal.osm.pbf
 #PBF_FILE=../in/belarus-latest.osm.pbf
 STYLES=styles
 BOUNDS=bounds-latest.zip
+
+if [[ -n "$PBF_FILE"  ]]
+then
+    echo "[INFO] using custom PBF_FILE:"
+    echo PBF_FILE=$PBF_FILE
+else
+    echo "[INFO] using default PBF_FILE:"
+    export PBF_FILE=../in/belarus.osm.pbf
+    echo PBF_FILE=$PBF_FILE
+fi
+
 
 TEMPLATE_ARGS="$TEMP_DIR/template.args"
 STRANGER_STYLE_FILE="$STYLES/my_stranger/"

@@ -388,7 +388,8 @@ def split():
     log('Start split')
     try:
         cmds = []
-        for mapFile in os.listdir(inputDir):
+        for map_name, url_to_map in urls['maps'].items():
+            mapFile = os.path.join(inputDir, map_name + '.osm.pbf')
             log(mapFile)
             for polyFile in os.listdir(polyDir):
                 log(polyFile)
@@ -508,7 +509,9 @@ def organicmaps():
 def garmin():
     log('Start GARMIN map Creator')
     os.chdir(garminDir)
-    os.system('bash build.sh')
+    for map_name, url_to_map in urls['maps'].items():
+        mapFile = os.path.join(inputDir, map_name + '.osm.pbf')        
+        os.system('bash build.sh ' + mapFile)
     os.chdir(currentDir)
     log('Finish GARMIN map Creator')
 

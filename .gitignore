@@ -118,3 +118,5 @@ osmconvert_tempfile.*
 status*
 garmin/bounds
 organicmap/organicmaps/*
+organicmap/map_build/*
+organicmap/organicmaps
