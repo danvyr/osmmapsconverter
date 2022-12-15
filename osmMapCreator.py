@@ -530,7 +530,6 @@ def main():
  #   prepare():
 
     log('Started')
-    clean()
     if readStatus() == 'finished':
         writeStatus('running')
         checkDirs()
