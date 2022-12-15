@@ -196,7 +196,7 @@ echo "[INFO] Move result files $NAME"
 
 mv $TEMP_DIR/gmapsupp.img $TEMP_DIR/"$NAME"_generic_new.img
 
-mv temp/Belarus_map_* /var/www/maps/garmin/
+mv temp/"$NAME"* /var/www/maps/garmin/
 
 echo "[INFO] Delete temp files"
 rm -rf  $TEMP_DIR/*

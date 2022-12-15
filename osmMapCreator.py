@@ -91,7 +91,7 @@ currentDir = os.path.abspath('.')
 currentMap = os.path.join(currentDir, 'currentMap.txt')
 currentStatus = os.path.join(currentDir, 'status.txt')
 
-inputDir = os.path.abspath('in')
+inputDir = os.path.abspath('/var/www/maps/pbf')
 
 polyDir = os.path.abspath('poly')
 splitDir = os.path.abspath('split')
@@ -114,7 +114,7 @@ outOsmAnd = os.path.join(outDir, 'osmand')
 outOrganicmaps = os.path.join(outDir, 'organicmap')
 outGarmin = os.path.join(outDir, 'garmin')
 
-tempDirs = [inputDir, tempOrganicmap, tempGarmin, tempSplit]
+tempDirs = [tempOrganicmap, tempGarmin, tempSplit]
 innerDirs = [polyDir, splitDir, organicmapDir, osmandDir, garminDir, OAMCDir, logsDir]
 outDirs = [outDir, outOsmAnd, outOrganicmaps, outGarmin]
 
@@ -519,7 +519,7 @@ def convertRus():
     for map_name, url_to_map in urls['maps'].items():
         log(map_name)
         pathToFile = os.path.join(inputDir, map_name + '.osm.pbf')
-        pathToRuFile = os.path.join(outDir, map_name + '-ru.osm.pbf')
+        pathToRuFile = os.path.join(inputDir, map_name + '-ru.osm.pbf')
         os.system('python3 rus/osm_back.py -l ru -o ' + pathToRuFile + ' ' + pathToFile)
     log('END convert rus')
 
