@@ -155,6 +155,7 @@ def readStatus():
             return  f.readline()
     except:
         with open(currentStatus, 'w') as f:
+            log ('[INFO] except, write start')
             f.write('start')
         return 'finished'
 
@@ -527,46 +528,35 @@ def convertRus():
     log('END convert rus')
 
 
-    
+
 
 def main():
  #   prepare():
-
     log('Started')
-    if readStatus() == 'finished':
+    dl = checkURL()
+    log ('Check version = '+ dl)
+
+    if readStatus() == 'finished' and checkVersion(dl):
         writeStatus('running')
         checkDirs()
-
-        dl = checkURL()
-
-        log ('Check version = '+ dl)
-
-        if checkVersion(dl):
-            log('Run ')
-            writeStatus('running')
-            if(download()):
-                log('downloaded')
-                convertRus()
-                if split():
-                    osmand()
-                garmin()
-            # organicmaps()
-            if(moveCount > 1):
-                writeVersion(dl)
-                log('Something done')
-            else:
-                log('Nothing done')
-
+        log('Run ')
+        writeStatus('running')
+        if(download()):
+            log('downloaded')
+            convertRus()
+            if split():
+                osmand()
+            garmin()
+        # organicmaps()
+        if(moveCount > 1):
+            writeVersion(dl)
+            log('Something done')
         else:
-            log('old map')
-
+            log('Nothing done')
         clean()
         writeStatus('finished')
-
     else:
         log('Can\'t start - check status file')
-
-
     log('Finished')
 
 
