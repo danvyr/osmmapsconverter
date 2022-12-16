@@ -152,7 +152,7 @@ def log(status):
 def readStatus():
     try:
         with open(currentStatus, 'r') as f:
-            log ('[INFO] currentStatus'+ f.readline())
+            log ('[INFO] currentStatus  '+ f.readline())
             return  f.readline()
     except:
         with open(currentStatus, 'w') as f:
@@ -177,6 +177,7 @@ def checkVersion(urlDate):
         with open(currentMap, 'r') as vf:
             version = vf.readline()
             if version != urlDate:
+                log ('[INFO] checkVersion not match')
                 return 1
             else:
                 return 0
