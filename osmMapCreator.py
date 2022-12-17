@@ -180,6 +180,7 @@ def checkVersion(urlDate):
                 log ('[INFO] checkVersion not match')
                 return 1
             else:
+                log ('[INFO] checkVersion match. Skip')
                 return 0
     except:
         log ('first launch')
