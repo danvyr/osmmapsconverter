@@ -540,7 +540,7 @@ def main():
     dl = checkURL()
     log ('Check version = '+ dl)
 
-    if readStatus() == 'finished' and checkVersion(dl):
+    if (readStatus() == 'finished') and checkVersion(dl):
         writeStatus('running')
         checkDirs()
         log('Run ')
