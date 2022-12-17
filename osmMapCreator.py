@@ -539,26 +539,30 @@ def main():
     log('Started')
     dl = checkURL()
     log ('Check version = '+ dl)
-
-    if (readStatus() == 'finished') and checkVersion(dl):
-        writeStatus('running')
-        checkDirs()
-        log('Run ')
-        writeStatus('running')
-        if(download()):
-            log('downloaded')
-            convertRus()
-            if split():
-                osmand()
-            garmin()
-        # organicmaps()
-        if(moveCount > 1):
-            writeVersion(dl)
-            log('Something done')
+    checkVersion(dl)
+    if (readStatus() == 'finished'):
+        if checkVersion(dl):
+            writeStatus('running')
+            checkDirs()
+            log('Run ')
+            writeStatus('running')
+            if(download()):
+                log('downloaded')
+                convertRus()
+                if split():
+                    osmand()
+                garmin()
+            # organicmaps()
+            if(moveCount > 1):
+                writeVersion(dl)
+                log('Something done')
+            else:
+                log('Nothing done')
+            clean()
+            writeStatus('finished')
         else:
-            log('Nothing done')
-        clean()
-        writeStatus('finished')
+            log('Can\'t start - updated')
+
     else:
         log('Can\'t start - check status file')
     log('Finished')
