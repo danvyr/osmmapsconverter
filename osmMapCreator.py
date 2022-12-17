@@ -173,6 +173,7 @@ def writeStatus(status):
 def checkVersion(urlDate):
     # наверное не надо
     version = ""
+    log ('[INFO] checkVersion urlDate')
     try:
         with open(currentMap, 'r') as vf:
             version = vf.readline()
@@ -183,7 +184,7 @@ def checkVersion(urlDate):
                 log ('[INFO] checkVersion match. Skip')
                 return 0
     except:
-        log ('first launch')
+        log ('[INFO] first launch')
         return 1
 
 
