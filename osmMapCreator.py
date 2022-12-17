@@ -172,7 +172,7 @@ def writeStatus(status):
 
 def checkVersion(urlDate):
     # наверное не надо
-    version = ""
+    # version = ""
     log ('[INFO] checkVersion urlDate')
     try:
         with open(currentMap, 'r') as vf:
