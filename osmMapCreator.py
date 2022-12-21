@@ -22,6 +22,13 @@ from multiprocessing import Pool
 # from multiprocessing.dummy import Pool as ThreadPool
 
 from multiprocessing import cpu_count
+from enum import Enum
+
+class statuses(Enum):
+    running = "running"
+    finished = "finished"
+
+
 MAPS_BUILD_DEF = "/home/osm/dev/osmmapsconverter/organicmap/map_build"
 
 urls = {
@@ -152,8 +159,9 @@ def log(status):
 def readStatus():
     try:
         with open(currentStatus, 'r') as f:
-            log ('[INFO] currentStatus  '+ f.readline())
-            return  f.readline()
+            statusLine = f.readline()
+            log ('[INFO] currentStatus  '+ statusLine)
+            return statusLine
     except:
         with open(currentStatus, 'w') as f:
             log ('[INFO] except, write start')
