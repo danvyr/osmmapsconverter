@@ -480,7 +480,7 @@ def organicmaps():
             "-e ORGANICMAP_COUNTRIES='" + map_name + "' " + \
             "-e ORGANICMAP_SKIP='Coastline,MwmStatistics' " + \
             "-e THREADS_COUNT=1 "+ \
-            "--name " + CONTAINER_NAME + " 9e0bf3776498 " #danvyr/organicmap:latest"
+            "--name " + CONTAINER_NAME + " danvyr/organicmap:latest"
             print(cmd)
             cmds.append([cmd, MAPS_BUILD, CONTAINER_NAME])
             i+=1
