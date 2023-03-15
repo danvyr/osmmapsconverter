@@ -139,13 +139,14 @@ def run_command(command):
 
 
 def run_docker(command):
-    print("RUN COMAND")
+    log("[INFO] RUN COMAND ****************************** " + command[0])
     os.system("docker rm "+ command[2])
     print (command[0])
     logging.info(str(command))
     os.system(command[0])
     clean(command[1])
     os.system("docker rm "+ command[2])
+    log("[INFO] END COMAND ******************************" + command[0])
 
 def nowtime():
     return datetime.today().strftime('%H-%M-%S: ')
@@ -462,7 +463,7 @@ def organicmaps():
     print("[INFO] organicmaps")
     cmd_rm = "docker rm /organicmap_mapgenerator "
     print("[INFO] organicmaps pool")
-    pool = Pool(cpu_count())
+    pool = Pool(1) #cpu_count())
     try:
         cmds = []
         i=0
