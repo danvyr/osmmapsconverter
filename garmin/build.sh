@@ -2,7 +2,7 @@
 
 TEMP_DIR=temp
 PBF_FILE=$1
-PBF_FILE_RU=/var/www/maps/belarus-ru.osm.pbf
+PBF_FILE_RU=/var/www/maps/pbf/belarus-ru.osm.pbf
 #PBF_FILE=~/belarus-latest-internal.osm.pbf
 #PBF_FILE=../in/belarus-latest.osm.pbf
 STYLES=styles

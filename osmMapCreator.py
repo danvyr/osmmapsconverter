@@ -523,7 +523,7 @@ def garmin():
     log('Start GARMIN map Creator')
     os.chdir(garminDir)
     for map_name, url_to_map in urls['maps'].items():
-        mapFile = os.path.join(inputDir, map_name + '.osm.pbf')        
+        mapFile = os.path.join(inputDir, map_name + '.osm.pbf')
         os.system('bash build.sh ' + mapFile)
     os.chdir(currentDir)
     log('Finish GARMIN map Creator')
@@ -560,7 +560,7 @@ def main():
                 if split():
                     osmand()
                 garmin()
-            # organicmaps()
+            organicmaps()
             if(moveCount > 1):
                 writeVersion(dl)
                 log('Something done')
