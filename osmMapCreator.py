@@ -92,7 +92,7 @@ countries = [
 ]
 
 user = 'osm'
-javaOpt = ' -Xms128M -Xmx3200M '
+javaOpt = ' -Xms256M -Xmx4000M '
 
 currentDir = os.path.abspath('.')
 currentMap = os.path.join(currentDir, 'currentMap.txt')
