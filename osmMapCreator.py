@@ -145,7 +145,7 @@ def run_docker(command):
     print (command[0])
     logging.info(str(command))
     os.system(command[0])
-    clean(command[1])
+    os.system("rm -rf "+ command[2])
     os.system("docker rm "+ command[2])
     log("[INFO] END COMAND ******************************" + command[0])
 
