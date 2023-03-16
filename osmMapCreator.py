@@ -17,6 +17,7 @@ import shutil
 import glob
 import datetime
 import email.utils as eut
+import multiprocessing
 from datetime import datetime, date, time
 from multiprocessing import Pool
 # from multiprocessing.dummy import Pool as ThreadPool
@@ -463,7 +464,7 @@ def organicmaps():
     print("[INFO] organicmaps")
     cmd_rm = "docker rm /organicmap_mapgenerator "
     print("[INFO] organicmaps pool")
-    pool = Pool(1) #cpu_count())
+    pool = Pool(2) #cpu_count())
     try:
         cmds = []
         i=0
@@ -480,7 +481,7 @@ def organicmaps():
             "-e PLANET_MD5_URL='" + map_url + ".md5' " + \
             "-e ORGANICMAP_COUNTRIES='" + map_name + "' " + \
             "-e ORGANICMAP_SKIP='Coastline,MwmStatistics' " + \
-            "-e THREADS_COUNT=1 "+ \
+            "-e THREADS_COUNT=" + "2" + " " \
             "--name " + CONTAINER_NAME + " danvyr/organicmap:latest"
             print(cmd)
             cmds.append([cmd, MAPS_BUILD, CONTAINER_NAME])
