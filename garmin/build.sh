@@ -1,12 +1,17 @@
-#!/bin/sh
+#!/bin/bash
+
+set -e
 
 TEMP_DIR=temp
 PBF_FILE=$1
 PBF_FILE_RU=/var/www/maps/pbf/belarus-ru.osm.pbf
-#PBF_FILE=~/belarus-latest-internal.osm.pbf
-#PBF_FILE=../in/belarus-latest.osm.pbf
 STYLES=styles
 BOUNDS=bounds-latest.zip
+#MKGMAP=mkgmap
+MKGMAP="java -jar mkgmap/mkgmap.jar"
+#SPLITTER=mkgmap-splitter
+SPLITTER="java -jar split/splitter.jar"
+OUT_DIR=out
 
 if [[ -n "$PBF_FILE"  ]]
 then
@@ -35,364 +40,67 @@ echo "STRANGER_STYLE_FILE = $STRANGER_STYLE_FILE "
 echo "TEMPLATE_ARGS = $TEMPLATE_ARGS "
 echo "STRANGER_TYP = $STRANGER_TYP "
 echo "DATE = $DATE"
+echo "OUT_DIR = $OUT_DIR"
 
-java -jar split/splitter.jar \
-    --max-nodes=1200000 \
-    --keep-complete=true \
-    --output=pbf \
-    --output-dir=$TEMP_DIR \
-    $PBF_FILE
-
-
+mkdir -p $OUT_DIR
 
 COUNTRY_NAME=Belarus
-COUNTRY_ABBR=BY
+COUNTRY_CODE=BY
 
-FAMILY_ID=5050
-MAPNAME=80808080
-PRODUCT_ID=1
+./build_map.sh -i "$PBF_FILE" -o "$OUT_DIR/${NAME}_generic.img" \
+	-m "$MKGMAP" -S "$SPLITTER" \
+	-f 5050 \
+	-n "OpenStreetMap.by generic" \
+	-e "OpenStreetMap.by" \
+	-d "OSM default mkgmap style" \
+	-c "$COUNTRY_NAME" -k $COUNTRY_CODE
 
-java -jar mkgmap/mkgmap.jar \
-    --route --add-pois-to-areas \
-    --index  \
-    --bounds=$BOUNDS \
-    --gmapsupp \
-    --name-tag-list=name,name:ru,name:be,int_name \
-    --mapname=$MAPNAME \
-    --family-id=$FAMILY_ID \
-    --product-id=$PRODUCT_ID \
-    --series-name="OpenStreetMap.by" \
-    --family-name="OpenStreetMap.by" \
-    --link-pois-to-ways \
-    --country-name=$COUNTRY_NAME \
-    --country-abbr=$COUNTRY_ABBR  \
-    --description="Belarus_general, v.$DATE" \
-    --output-dir=$TEMP_DIR \
-    -c $TEMPLATE_ARGS
+./build_map.sh -i "$PBF_FILE" -o "$OUT_DIR/${NAME}_stranger.img" \
+	-m "$MKGMAP" -S "$SPLITTER" \
+	-s styles/my_stranger -t styles/my_stranger.typ \
+	-f 5052 \
+	-n "OpenStreetMap + ST-GIS by Maks Vasilev" \
+	-e "OpenStreetMap.by" \
+	-y "OpenStreetMap CC-BY-SA 2.0, ST-GIS CC-BY-SA 3.0, ST-GIS, Maks Vasilev" \
+	-d "Belarus_velo100, v.$DATE" \
+	-c "$COUNTRY_NAME" -k $COUNTRY_CODE
 
-
-echo "[INFO] Move result files $NAME"
-mv $TEMP_DIR/gmapsupp.img $TEMP_DIR/"$NAME"_general.img
-
-
-FAMILY_ID=5051
-MAPNAME=80818081
-PRODUCT_ID=2
-
-# java -jar mkgmap/mkgmap.jar \
-#     --verbose \
-#     --output-dir=$TEMP_DIR \
-#     --gmapsupp \
-#     --tdbfile \
-#     --series-name="OpenStreetMap.by" \
-#     --family-name="OpenStreetMap.by" \
-#     --description="Belarus_routes-bicycle, v.$DATE" \
-#     --country-name=$COUNTRY_NAME \
-#     --country-abbr=$COUNTRY_ABBR \
-#     --code-page=1251 \
-#     --lower-case \
-#     --name-tag-list=name,name:ru,name:be,int_name \
-#     --style=routes-bicycle \
-#     --remove-short-arcs \
-#     --drive-on=right \
-#     --check-roundabouts \
-#     --mapname=$MAPNAME \
-#     --family-id=$FAMILY_ID \
-#     --product-id=$PRODUCT_ID \
-#     --make-poi-index \
-#     --index \
-#     --poi-address \
-#     --route \
-#     --draw-priority=31 \
-#     --bounds=$BOUNDS \
-#     --housenumbers \
-#     --add-pois-to-areas \
-#     -c $TEMPLATE_ARGS  $GENERIC_TYP
-    
-# java -jar mkgmap/mkgmap.jar \
-#     --route --add-pois-to-areas \
-#     --bounds=$BOUNDS \
-#     --index  \
-#     --gmapsupp \
-#     --name-tag-list=name,name:ru,name:be,int_name \
-#     --mapname=$MAPNAME \
-#     --family-id=$FAMILY_ID \
-#     --link-pois-to-ways \
-#     --style=routes-bicycle \
-#     --country-name=$COUNTRY_NAME \
-#     --country-abbr=$COUNTRY_ABBR  \
-#     --description="Belarus_bicycle, v.$DATE" \
-#     --output-dir=$TEMP_DIR \
-#     -c $TEMPLATE_ARGS
-
-# echo "[INFO] Move result files $NAME"
-# mv $TEMP_DIR/gmapsupp.img $TEMP_DIR/"$NAME"_routes_bicycle.img
-
-
-FAMILY_ID=5052
-MAPNAME=80828082
-PRODUCT_ID=3
-
-java -jar mkgmap/mkgmap.jar \
-    --verbose \
-    --output-dir=$TEMP_DIR \
-    --gmapsupp \
-    --tdbfile \
-    --series-name="OpenStreetMap.by" \
-    --family-name="OpenStreetMap.by" \
-    --family-name="OpenStreetMap + ST-GIS by Maks Vasilev" \
-    --description="Belarus_velo100, v.$DATE" \
-    --country-name=$COUNTRY_NAME \
-    --country-abbr=$COUNTRY_ABBR \
-    --copyright-message="OpenStreetMap CC-BY-SA 2.0, ST-GIS CC-BY-SA 3.0, ST-GIS, Maks Vasilev" \
-    --code-page=1251 \
-    --lower-case \
-    --name-tag-list=name,name:ru,name:be,int_name \
-    --style-file=$STRANGER_STYLE_FILE \
-    --remove-short-arcs \
-    --drive-on=right \
-    --check-roundabouts \
-    --mapname=$MAPNAME \
-    --family-id=$FAMILY_ID \
-    --product-id=$PRODUCT_ID \
-    --make-poi-index \
-    --index \
-    --poi-address \
-    --route \
-    --draw-priority=31 \
-    --bounds=$BOUNDS \
-    --housenumbers \
-    --add-pois-to-areas \
-    -c $TEMPLATE_ARGS  $STRANGER_TYP
-
-echo "[INFO] Move result files $NAME"
-mv $TEMP_DIR/gmapsupp.img $TEMP_DIR/"$NAME"_stranger.img
-
-
-FAMILY_ID=5053
-MAPNAME=80838083
-PRODUCT_ID=4
-
-java -jar mkgmap/mkgmap.jar \
-    --verbose \
-    --output-dir=$TEMP_DIR \
-    --gmapsupp \
-    --tdbfile \
-    --series-name="OpenStreetMap.by" \
-    --family-name="OpenStreetMap.by" \
-    --description="Belarus_generic_new, v.$DATE" \
-    --country-name=$COUNTRY_NAME \
-    --country-abbr=$COUNTRY_ABBR \
-    --code-page=1251 \
-    --lower-case \
-    --name-tag-list=name,name:ru,name:be,int_name \
-    --style-file=$GENERIC_STYLE_FILE \
-    --remove-short-arcs \
-    --drive-on=right \
-    --check-roundabouts \
-    --mapname=$MAPNAME \
-    --family-id=$FAMILY_ID \
-    --product-id=$PRODUCT_ID \
-    --make-poi-index \
-    --index \
-    --poi-address \
-    --route \
-    --draw-priority=31 \
-    --bounds=$BOUNDS \
-    --housenumbers \
-    --add-pois-to-areas \
-    -c $TEMPLATE_ARGS  $GENERIC_TYP
-
-echo "[INFO] Move result files $NAME"
-
-mv $TEMP_DIR/gmapsupp.img $TEMP_DIR/"$NAME"_generic_new.img
-
-mv temp/"$NAME"* /var/www/maps/garmin/
-
-echo "[INFO] Delete temp files"
-rm -rf  $TEMP_DIR/*
+./build_map.sh -i "$PBF_FILE" -o "$OUT_DIR/${NAME}_generic_new.img" \
+	-m "$MKGMAP" -S "$SPLITTER" \
+	-s styles/generic_new -t styles/generic_new.typ \
+	-f 5053 \
+	-n "OpenStreetMap generic, new" \
+	-e "OpenStreetMap.by" \
+	-d "Belarus_generic_new, v.$DATE" \
+	-c "$COUNTRY_NAME" -k $COUNTRY_CODE
 
 
 PBF_FILE=$PBF_FILE_RU
-STYLES=styles
-BOUNDS=bounds-latest.zip
 
-TEMPLATE_ARGS="$TEMP_DIR/template.args"
-STRANGER_STYLE_FILE="$STYLES/my_stranger/"
-STRANGER_TYP="$STYLES/my_stranger.typ"
-GENERIC_STYLE_FILE="$STYLES/generic_new/"
-GENERIC_TYP="$STYLES/generic_new.typ"
+./build_map.sh -i "$PBF_FILE" -o "$OUT_DIR/${NAME}_generic_ru.img" \
+	-m "$MKGMAP" -S "$SPLITTER" \
+	-f 5054 \
+	-n "OpenStreetMap.by generic (ru)" \
+	-e "OpenStreetMap.by" \
+	-d "OSM default mkgmap style, ru" \
+	-c "$COUNTRY_NAME" -k $COUNTRY_CODE
 
-DATE=`date +%F`
-NAME="Belarus_map"
+./build_map.sh -i "$PBF_FILE" -o "$OUT_DIR/${NAME}_stranger_ru.img" \
+	-m "$MKGMAP" -S "$SPLITTER" \
+	-s styles/my_stranger -t styles/my_stranger.typ \
+	-f 5055 \
+	-n "OpenStreetMap + ST-GIS by Maks Vasilev (ru)" \
+	-e "OpenStreetMap.by" \
+	-y "OpenStreetMap CC-BY-SA 2.0, ST-GIS CC-BY-SA 3.0, ST-GIS, Maks Vasilev" \
+	-d "Belarus_velo100, v.$DATE, ru" \
+	-c "$COUNTRY_NAME" -k $COUNTRY_CODE
 
-echo "TEMP_DIR = $TEMP_DIR "
-echo "STYLES = $STYLES "
-echo "BOUNDS = $BOUNDS "
-echo "STRANGER_STYLE_FILE = $STRANGER_STYLE_FILE "
-echo "TEMPLATE_ARGS = $TEMPLATE_ARGS "
-echo "STRANGER_TYP = $STRANGER_TYP "
-echo "DATE = $DATE"
+./build_map.sh -i "$PBF_FILE" -o "$OUT_DIR/${NAME}_generic_new_ru.img" \
+	-m "$MKGMAP" -S "$SPLITTER" \
+	-s styles/generic_new -t styles/generic_new.typ \
+	-f 5056 \
+	-n "OpenStreetMap generic, new (ru)" \
+	-e "OpenStreetMap.by" \
+	-d "Belarus_generic_new, v.$DATE, ru" \
+	-c "$COUNTRY_NAME" -k $COUNTRY_CODE
 
-
-java -jar split/splitter.jar \
-    --max-nodes=1200000 \
-    --keep-complete=true \
-    --output=pbf \
-    --output-dir=$TEMP_DIR \
-    $PBF_FILE
-
-
-
-COUNTRY_NAME=Belarus
-COUNTRY_ABBR=BY
-
-FAMILY_ID=5050
-MAPNAME=80808080
-PRODUCT_ID=1
-
-java -jar mkgmap/mkgmap.jar \
-    --route --add-pois-to-areas \
-    --index  \
-    --bounds=$BOUNDS \
-    --gmapsupp \
-    --name-tag-list=name,name:ru,name:be,int_name \
-    --mapname=$MAPNAME \
-    --family-id=$FAMILY_ID \
-    --product-id=$PRODUCT_ID \
-    --series-name="OpenStreetMap.by" \
-    --family-name="OpenStreetMap.by" \
-    --link-pois-to-ways \
-    --country-name=$COUNTRY_NAME \
-    --country-abbr=$COUNTRY_ABBR  \
-    --description="Belarus_general, v.$DATE" \
-    --output-dir=$TEMP_DIR \
-    -c $TEMPLATE_ARGS
-
-
-echo "[INFO] Move result files $NAME"
-mv $TEMP_DIR/gmapsupp.img $TEMP_DIR/"$NAME"_general_ru.img
-
-
-FAMILY_ID=5051
-MAPNAME=80818081
-PRODUCT_ID=2
-
-# java -jar mkgmap/mkgmap.jar \
-#     --verbose \
-#     --output-dir=$TEMP_DIR \
-#     --gmapsupp \
-#     --tdbfile \
-#     --series-name="OpenStreetMap.by" \
-#     --family-name="OpenStreetMap.by" \
-#     --description="Belarus_routes-bicycle, v.$DATE" \
-#     --country-name=$COUNTRY_NAME \
-#     --country-abbr=$COUNTRY_ABBR \
-#     --code-page=1251 \
-#     --lower-case \
-#     --name-tag-list=name,name:ru,name:be,int_name \
-#     --style=routes-bicycle \
-#     --remove-short-arcs \
-#     --drive-on=right \
-#     --check-roundabouts \
-#     --mapname=$MAPNAME \
-#     --family-id=$FAMILY_ID \
-#     --product-id=$PRODUCT_ID \
-#     --make-poi-index \
-#     --index \
-#     --poi-address \
-#     --route \
-#     --draw-priority=31 \
-#     --bounds=$BOUNDS \
-#     --housenumbers \
-#     --add-pois-to-areas \
-#     -c $TEMPLATE_ARGS  $GENERIC_TYP
-    
-
-# echo "[INFO] Move result files $NAME"
-# mv $TEMP_DIR/gmapsupp.img $TEMP_DIR/"$NAME"_routes_bicycle_ru.img
-
-
-FAMILY_ID=5052
-MAPNAME=80828082
-PRODUCT_ID=3
-
-java -jar mkgmap/mkgmap.jar \
-    --verbose \
-    --output-dir=$TEMP_DIR \
-    --gmapsupp \
-    --tdbfile \
-    --series-name="OpenStreetMap.by" \
-    --family-name="OpenStreetMap.by" \
-    --family-name="OpenStreetMap + ST-GIS by Maks Vasilev" \
-    --description="Belarus_velo100, v.$DATE" \
-    --country-name=$COUNTRY_NAME \
-    --country-abbr=$COUNTRY_ABBR \
-    --copyright-message="OpenStreetMap CC-BY-SA 2.0, ST-GIS CC-BY-SA 3.0, ST-GIS, Maks Vasilev" \
-    --code-page=1251 \
-    --lower-case \
-    --name-tag-list=name,name:ru,name:be,int_name \
-    --style-file=$STRANGER_STYLE_FILE \
-    --remove-short-arcs \
-    --drive-on=right \
-    --check-roundabouts \
-    --mapname=$MAPNAME \
-    --family-id=$FAMILY_ID \
-    --product-id=$PRODUCT_ID \
-    --make-poi-index \
-    --index \
-    --poi-address \
-    --route \
-    --draw-priority=31 \
-    --bounds=$BOUNDS \
-    --housenumbers \
-    --add-pois-to-areas \
-    -c $TEMPLATE_ARGS  $STRANGER_TYP
-
-
-echo "[INFO] Move result files $NAME"
-mv $TEMP_DIR/gmapsupp.img $TEMP_DIR/"$NAME"_stranger_ru.img
-
-
-FAMILY_ID=5053
-MAPNAME=80838083
-PRODUCT_ID=4
-
-java -jar mkgmap/mkgmap.jar \
-    --verbose \
-    --output-dir=$TEMP_DIR \
-    --gmapsupp \
-    --tdbfile \
-    --series-name="OpenStreetMap.by" \
-    --family-name="OpenStreetMap.by" \
-    --description="Belarus_generic_new, v.$DATE" \
-    --country-name=$COUNTRY_NAME \
-    --country-abbr=$COUNTRY_ABBR \
-    --code-page=1251 \
-    --lower-case \
-    --name-tag-list=name,name:ru,name:be,int_name \
-    --style-file=$GENERIC_STYLE_FILE \
-    --remove-short-arcs \
-    --drive-on=right \
-    --check-roundabouts \
-    --mapname=$MAPNAME \
-    --family-id=$FAMILY_ID \
-    --product-id=$PRODUCT_ID \
-    --make-poi-index \
-    --index \
-    --poi-address \
-    --route \
-    --draw-priority=31 \
-    --bounds=$BOUNDS \
-    --housenumbers \
-    --add-pois-to-areas \
-    -c $TEMPLATE_ARGS  $GENERIC_TYP
-
-
-echo "[INFO] Move result files $NAME"
-mv $TEMP_DIR/gmapsupp.img $TEMP_DIR/"$NAME"_generic_new_ru.img
-
-mv temp/Belarus_map_* /var/www/maps/garmin/
-
-echo "[INFO] Delete temp files"
-rm -rf  $TEMP_DIR/*
