@@ -112,6 +112,7 @@ garminDir = os.path.abspath('garmin')
 OAMCDir = os.path.join(osmandDir, 'OsmAndMapCreator')
 
 tempGarmin = os.path.join(garminDir, 'temp')
+tempOutGarmin = os.path.join(garminDir, 'out')
 tempOrganicmap = os.path.join(organicmapDir, 'map_build')
 tempSplit = os.path.join(currentDir, 'split')
 
@@ -122,7 +123,7 @@ outOsmAnd = os.path.join(outDir, 'osmand')
 outOrganicmaps = os.path.join(outDir, 'organicmap')
 outGarmin = os.path.join(outDir, 'garmin')
 
-tempDirs = [tempOrganicmap, tempGarmin, tempSplit]
+tempDirs = [tempOrganicmap, tempGarmin, tempOutGarmin, tempSplit]
 innerDirs = [polyDir, splitDir, organicmapDir, osmandDir, garminDir, OAMCDir, logsDir]
 outDirs = [outDir, outOsmAnd, outOrganicmaps, outGarmin]
 
@@ -344,7 +345,7 @@ def moveGarmin():
     log('move garmin map')
     try:
         name = 'Belarus_*.img'
-        path = tempGarmin + '/' + name
+        path = tempOutGarmin + '/' + name
         for file in glob.glob(path):
             shutil.move(file, outGarmin)
             garminCount = garminCount + 1
