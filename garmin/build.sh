@@ -50,8 +50,8 @@ COUNTRY_CODE=BY
 ./build_map.sh -i "$PBF_FILE" -o "$OUT_DIR/${NAME}_generic.img" \
 	-m "$MKGMAP" -S "$SPLITTER" \
 	-f 5050 \
-	-n "OpenStreetMap.by generic" \
-	-e "OpenStreetMap.by" \
+	-n "Belarus OpenStreetMap.by generic" \
+	-e "Belarus OpenStreetMap.by generic" \
 	-d "OSM default mkgmap style" \
 	-c "$COUNTRY_NAME" -k $COUNTRY_CODE
 
@@ -59,8 +59,8 @@ COUNTRY_CODE=BY
 	-m "$MKGMAP" -S "$SPLITTER" \
 	-s styles/my_stranger -t styles/my_stranger.typ \
 	-f 5052 \
-	-n "OpenStreetMap + ST-GIS by Maks Vasilev" \
-	-e "OpenStreetMap.by" \
+	-n "Belarus OpenStreetMap + ST-GIS by Maks Vasilev" \
+	-e "Belarus OpenStreetMap.by velo100" \
 	-y "OpenStreetMap CC-BY-SA 2.0, ST-GIS CC-BY-SA 3.0, ST-GIS, Maks Vasilev" \
 	-d "Belarus_velo100, v.$DATE" \
 	-c "$COUNTRY_NAME" -k $COUNTRY_CODE
@@ -69,8 +69,8 @@ COUNTRY_CODE=BY
 	-m "$MKGMAP" -S "$SPLITTER" \
 	-s styles/generic_new -t styles/generic_new.typ \
 	-f 5053 \
-	-n "OpenStreetMap generic, new" \
-	-e "OpenStreetMap.by" \
+	-n "Belarus OpenStreetMap generic, new" \
+	-e "Belarus OpenStreetMap.by generic, new" \
 	-d "Belarus_generic_new, v.$DATE" \
 	-c "$COUNTRY_NAME" -k $COUNTRY_CODE
 
@@ -80,8 +80,8 @@ PBF_FILE=$PBF_FILE_RU
 ./build_map.sh -i "$PBF_FILE" -o "$OUT_DIR/${NAME}_generic_ru.img" \
 	-m "$MKGMAP" -S "$SPLITTER" \
 	-f 5054 \
-	-n "OpenStreetMap.by generic (ru)" \
-	-e "OpenStreetMap.by" \
+	-n "Belarus OpenStreetMap.by generic (ru)" \
+	-e "Belarus OpenStreetMap.by generic (ru)" \
 	-d "OSM default mkgmap style, ru" \
 	-c "$COUNTRY_NAME" -k $COUNTRY_CODE
 
@@ -89,8 +89,8 @@ PBF_FILE=$PBF_FILE_RU
 	-m "$MKGMAP" -S "$SPLITTER" \
 	-s styles/my_stranger -t styles/my_stranger.typ \
 	-f 5055 \
-	-n "OpenStreetMap + ST-GIS by Maks Vasilev (ru)" \
-	-e "OpenStreetMap.by" \
+	-n "Belarus OpenStreetMap + ST-GIS by Maks Vasilev (ru)" \
+	-e "Belarus OpenStreetMap.by velo100 (ru)" \
 	-y "OpenStreetMap CC-BY-SA 2.0, ST-GIS CC-BY-SA 3.0, ST-GIS, Maks Vasilev" \
 	-d "Belarus_velo100, v.$DATE, ru" \
 	-c "$COUNTRY_NAME" -k $COUNTRY_CODE
@@ -99,8 +99,8 @@ PBF_FILE=$PBF_FILE_RU
 	-m "$MKGMAP" -S "$SPLITTER" \
 	-s styles/generic_new -t styles/generic_new.typ \
 	-f 5056 \
-	-n "OpenStreetMap generic, new (ru)" \
-	-e "OpenStreetMap.by" \
+	-n "Belarus OpenStreetMap generic, new (ru)" \
+	-e "Belarus OpenStreetMap.by generic, new" \
 	-d "Belarus_generic_new, v.$DATE, ru" \
 	-c "$COUNTRY_NAME" -k $COUNTRY_CODE
 
