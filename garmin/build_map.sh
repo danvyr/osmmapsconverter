@@ -9,6 +9,8 @@ SPLITTER=mkgmap-splitter
 FAMILY_ID="6324" # mkgmap default
 PRODUCT_ID=1
 
+CODEPAGE=1251
+
 TEMPLATE_ARGS="$TEMP_DIR/template.args"
 MKGMAP_ARGS=""
 
@@ -20,10 +22,6 @@ usage() {
 	echo "Required args:" >&2
 	echo "  -i <input.pbf>	Input file" >&2
 	echo "  -o <output.img>	Output file" >&2
-	echo "  -" >&2
-	echo "  -" >&2
-	echo "  -" >&2
-	echo "  -" >&2
 
 	echo "Options:" >&2
 	echo "  -s <style>		Path to mkgmap style" >&2
@@ -35,6 +33,7 @@ usage() {
 	echo "  -f <family>		Map Family ID" >&2
 	echo "  -n <family name>	Family name" >&2
 	echo "  -e <series name>	Series name" >&2
+	echo "  -C <codepage>		Codepage (1251 by default)" >&2
 	echo "  -m <mkgmap>		Command to run mkgmap [default: mkgmap]" >&2
 	echo "  -S <splitter>		Command to run splitter [default: mkgmap-splitter]" >&2
 	echo "  -v			Verbose output" >&2
@@ -42,7 +41,7 @@ usage() {
 	exit 1
 }
 
-while getopts "ho:i:f:s:t:c:k:y:n:e:m:S:d:" arg; do
+while getopts "ho:i:f:s:t:c:k:y:n:e:m:S:d:C:" arg; do
 	case "${arg}" in
 		h)
 			usage ;;
@@ -68,6 +67,8 @@ while getopts "ho:i:f:s:t:c:k:y:n:e:m:S:d:" arg; do
 			MKGMAP_ARGS="$MKGMAP_ARGS --family-name='${OPTARG}'" ;;
 		e)
 			MKGMAP_ARGS="$MKGMAP_ARGS --series-name='${OPTARG}'" ;;
+		C)
+			CODEPAGE=$OPTARG ;;
 		v)
 			MKGMAP_ARGS="$MKGMAP_ARGS --verbose --report-roundabout-issues=all" ;;
 		m)
@@ -113,9 +114,8 @@ $SPLITTER \
 echo "Run mkgmap..."
 eval $MKGMAP \
     --output-dir="$TEMP_DIR" \
-    --gmapsupp \
     --tdbfile \
-    --code-page=1251 \
+    --code-page=$CODEPAGE \
     --lower-case \
     --name-tag-list=name,name:ru,name:be,int_name \
     --remove-short-arcs \
@@ -132,12 +132,21 @@ eval $MKGMAP \
     --precomp-sea="$SEA" \
     --housenumbers \
     --add-pois-to-areas \
+    --gmapi \
+    --gmapsupp \
     $MKGMAP_ARGS \
     -c "$TEMPLATE_ARGS"  "$TYP_FILE"
 
 echo "Done, copying result to $OUTPUT_FILE"
 
+cd "$TEMP_DIR"
+gmap_dir=`echo *.gmap`
+gmap_tgz=`basename "${OUTPUT_FILE%%.img}.gmap.tgz"`
+tar czf "$gmap_tgz" "$gmap_dir"
+cd ..
+
 mv "$TEMP_DIR/gmapsupp.img" "$OUTPUT_FILE"
+mv "$TEMP_DIR/$gmap_tgz" "`dirname \"$OUTPUT_FILE\"`"
 rm -rf temp/*
 
 

@@ -228,7 +228,7 @@ highway=escape [0x1161f road_class=0 road_speed=1 resolution 23]
 (highway=service | highway=raceway) & length()<=250 [0x07 road_class=0 road_speed=2 resolution 23]
  
 highway=byway [0x16 road_class=0 road_speed=0 resolution 23]
-highway=cycleway {add access = no; add bicycle = yes; add foot = yes} [0x16 road_class=0 road_speed=1 resolution 23]
+highway=cycleway {add access = no; add bicycle = yes; add foot = yes} [0x0e road_class=0 road_speed=1 resolution 23]
 highway=bridleway {add access = no; add bicycle = yes; add foot = yes} [0x16 road_class=0 road_speed=0 resolution 23]
 (highway=footway | highway=path ) & bridge=yes {add access = no; add foot = yes} [0x0f road_class=0 road_speed=0 resolution 24 continue]
 (highway=footway | highway=path ) & bridge=yes {add access = no; add foot = yes} [0x1161d resolution 24]
