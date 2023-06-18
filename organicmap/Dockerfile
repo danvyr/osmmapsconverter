@@ -8,12 +8,13 @@ RUN apt-get update && DEBIAN_FRONTEND="noninteractive"  apt-get install -y \
     clang \
     ninja-build \
     python3 \
-    qtbase5-dev \
+    qt6-base-dev \
     libc++-dev \
     libfreetype-dev \
-    libglu1-mesa-dev \
+    libglvnd-dev \
+    libgl1-mesa-dev \
     libicu-dev \
-    libqt5svg5-dev \
+    libqt6svg6-dev \
     libsqlite3-dev \
     zlib1g-dev \
     cmake
@@ -49,7 +50,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN apt-get update && DEBIAN_FRONTEND="noninteractive"  apt-get install -y \
     python3 \
-    qtbase5-dev \
+    qt6-base-dev \
     gettext-base \
     software-properties-common \
     python3-distutils \
