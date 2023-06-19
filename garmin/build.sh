@@ -8,9 +8,9 @@ PBF_FILE_RU=/var/www/maps/pbf/belarus-ru.osm.pbf
 STYLES=styles
 BOUNDS=bounds-latest.zip
 #MKGMAP=mkgmap
-MKGMAP="java -jar mkgmap/mkgmap.jar"
+MKGMAP="java -Xmx6000m -jar mkgmap/mkgmap.jar"
 #SPLITTER=mkgmap-splitter
-SPLITTER="java -jar split/splitter.jar"
+SPLITTER="java -Xmx6000m -jar split/splitter.jar"
 OUT_DIR=out
 
 if [[ -n "$PBF_FILE"  ]]
