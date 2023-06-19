@@ -344,7 +344,7 @@ def moveGarmin():
     # move garmin temp/Belarus_map_general.img
     log('move garmin map')
     try:
-        name = 'Belarus_*.img'
+        name = 'Belarus_*'
         path = tempOutGarmin + '/' + name
         for file in glob.glob(path):
             shutil.move(file, outGarmin)
