@@ -346,7 +346,10 @@ def moveGarmin():
     try:
         name = 'Belarus_*'
         path = tempOutGarmin + '/' + name
+        print ("[INFO] Garmin temp out path = " + path)
+        print ("[INFO] Garmin out path = " + outGarmin)
         for file in glob.glob(path):
+            print("[INFO] Moving file " + file)
             shutil.move(file, outGarmin)
             garminCount = garminCount + 1
     except:
