@@ -55,7 +55,8 @@ RUN apt-get update && DEBIAN_FRONTEND="noninteractive"  apt-get install -y \
     software-properties-common \
     python3-distutils \
     python3-pip \
-    python3-apt
+    python3-apt \
+    osmctools
     
 RUN mkdir -p $HOME_DIR/organicmaps/data/borders \
     $HOME_DIR/organicmaps/tools/python/maps_generator/var/etc/ \
