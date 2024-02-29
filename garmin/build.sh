@@ -8,9 +8,9 @@ PBF_FILE_RU=/var/www/maps/pbf/belarus-ru.osm.pbf
 STYLES=styles
 BOUNDS=bounds-latest.zip
 #MKGMAP=mkgmap
-MKGMAP="java -Xmx6000m -jar mkgmap/mkgmap.jar"
+MKGMAP="java -Xmx3000m -jar mkgmap/mkgmap.jar"
 #SPLITTER=mkgmap-splitter
-SPLITTER="java -Xmx6000m -jar split/splitter.jar"
+SPLITTER="java -Xmx3000m -jar split/splitter.jar"
 OUT_DIR=out
 
 if [[ -n "$PBF_FILE"  ]]
@@ -74,6 +74,14 @@ COUNTRY_CODE=BY
 	-d "Belarus_generic_new, v.$DATE" \
 	-c "$COUNTRY_NAME" -k $COUNTRY_CODE
 
+./build_map.sh -i "$PBF_FILE" -o "$OUT_DIR/${NAME}_rogal.img" \
+	-m "$MKGMAP" -S "$SPLITTER" \
+	-s styles/rogal -t styles/rogal.typ \
+	-f 5057 \
+	-n "Belarus OpenStreetMap rogal, new" \
+	-e "Belarus OpenStreetMap.by rogal, new" \
+	-d "Belarus_rogal, v.$DATE" \
+	-c "$COUNTRY_NAME" -k $COUNTRY_CODE
 
 PBF_FILE=$PBF_FILE_RU
 
@@ -104,3 +112,12 @@ PBF_FILE=$PBF_FILE_RU
 	-d "Belarus_generic_new, v.$DATE, ru" \
 	-c "$COUNTRY_NAME" -k $COUNTRY_CODE
 
+
+./build_map.sh -i "$PBF_FILE" -o "$OUT_DIR/${NAME}_rogal_ru.img" \
+	-m "$MKGMAP" -S "$SPLITTER" \
+	-s styles/rogal -t styles/rogal.typ \
+	-f 5058 \
+	-n "Belarus OpenStreetMap rogal, new" \
+	-e "Belarus OpenStreetMap.by rogal, new" \
+	-d "Belarus_rogal, v.$DATE" \
+	-c "$COUNTRY_NAME" -k $COUNTRY_CODE

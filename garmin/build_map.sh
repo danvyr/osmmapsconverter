@@ -125,6 +125,7 @@ eval $MKGMAP \
     --product-id=$PRODUCT_ID \
     --make-poi-index \
     --index \
+	--nsis \
     --poi-address \
     --route \
     --draw-priority=31 \
