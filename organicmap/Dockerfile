@@ -17,7 +17,8 @@ RUN apt-get update && DEBIAN_FRONTEND="noninteractive"  apt-get install -y \
     libqt6svg6-dev \
     libsqlite3-dev \
     zlib1g-dev \
-    cmake
+    cmake \
+    && apt-get clean
 
 
 WORKDIR /organicmaps
@@ -39,25 +40,20 @@ LABEL org.opencontainers.image.authors=="danvyr@gmail.com"
 ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
 ENV PYTHONPATH $PYTHONPATH:/organicmaps/organicmaps/tools/python
+ENV TZ=Europe/London
 
 ARG HOME_DIR=/organicmaps
 ARG USER=organicmaps
 
+RUN mkdir /organicmaps && \
+    useradd -d $HOME_DIR -s /bin/bash $USER \
+    && chown $USER:$USER $HOME_DIR -R
+
 WORKDIR $HOME_DIR
 
-ENV TZ=Europe/London
+
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-RUN apt-get update && DEBIAN_FRONTEND="noninteractive"  apt-get install -y \
-    python3 \
-    qt6-base-dev \
-    gettext-base \
-    software-properties-common \
-    python3-distutils \
-    python3-pip \
-    python3-apt \
-    osmctools
-    
 RUN mkdir -p $HOME_DIR/organicmaps/data/borders \
     $HOME_DIR/organicmaps/tools/python/maps_generator/var/etc/ \
     $HOME_DIR/maps_build \
@@ -65,8 +61,19 @@ RUN mkdir -p $HOME_DIR/organicmaps/data/borders \
     $HOME_DIR/.config/OMaps
 
 
-RUN useradd -d $HOME_DIR -s /bin/bash $USER \
-        && chown $USER:$USER $HOME_DIR -R
+RUN apt-get update \
+    && DEBIAN_FRONTEND="noninteractive"  apt-get install \
+    python3 \
+    qt6-base-dev \
+    gettext-base \
+    software-properties-common \
+    python3-distutils \
+    python3-pip \
+    python3-apt \
+    osmctools \
+    -y --no-install-recommends \
+    && apt-get clean \
+    rm -rf /var/lib/apt/lists/*
 
 USER $USER
 
