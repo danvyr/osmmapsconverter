@@ -30,13 +30,21 @@ else
     cd ..
     pwd
 fi
+echo ""
 
+echo "[INFO] Copy  exceptions.py to organicmaps/tools/python/maps_generator/generator/exceptions.py"
+
+cp exceptions.py organicmaps/tools/python/maps_generator/generator/exceptions.py
+
+echo ""
 
 echo "[INFO] GIT_TAG =  $GIT_TAG"
 
+echo ""
+
 docker build -t $IMAGE_NAME:latest -t $IMAGE_NAME:$IMAGE_DATE -t $IMAGE_NAME:$GIT_TAG  .
 
-status=0
+status=$?
 echo "[INFO] status = $status"
 if [ $status -eq 0 ]
 then

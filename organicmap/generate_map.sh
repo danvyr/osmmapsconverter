@@ -3,12 +3,16 @@
 MAP_GENERATOR_INI=$HOME/organicmaps/tools/python/maps_generator/var/etc/map_generator.ini
 MAP_GENERATOR_INI_TEMPLATE=$HOME/map_generator.ini.template
 
+echo ""
+
 echo "[INFO] ENV:"
 
 echo PLANET_URL=$PLANET_URL
 echo PLANET_MD5_URL=$PLANET_MD5_URL
 echo ORGANICMAP_COUNTRIES=$ORGANICMAP_COUNTRIES
 echo ORGANICMAP_SKIP=$ORGANICMAP_SKIP
+echo THREADS_COUNT=$THREADS_COUNT
+echo ""
 
 if [[ -n "$SUBWAY_URL"  ]]
 then
@@ -30,12 +34,15 @@ else
     echo THREADS_COUNT=$THREADS_COUNT
 fi
 
+echo ""
+
 echo "[INFO] Change map_generator.ini:"
 
 envsubst < "$MAP_GENERATOR_INI_TEMPLATE" > "$MAP_GENERATOR_INI"
 
 cat $MAP_GENERATOR_INI
 
+echo ""
 
 echo "[INFO] Start generate"
 

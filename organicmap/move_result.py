@@ -34,14 +34,21 @@ def moveOrganicmaps(tempOrganicmap, outOrganicmaps):
             os.chdir(tempOrganicmap)
 
     # moving Organicmaps maps
+    count=0
     if status:
-        print('move Organicmaps map')
+        print('[INFO] Moving Organicmaps map...')
         for file in os.listdir(path):
             if file.endswith('.mwm'):
+                count+=1
+                print ('[INFO] Moving file ' + file)
                 shutil.move(os.path.join(path, file),
                             os.path.join(outOrganicmaps, file))
+        if count == 0:
+            print ('[INFO] No .mwm files found')
+        else:
+            print ('[INFO] number of moved files:'+ str(count))
     else:
-        print('Not move Organicmaps map')
+        print('[INFO] Generation had errors')
 
 
 def main():
