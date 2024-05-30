@@ -5,15 +5,16 @@ CURRENT_DIR=$(pwd)
 MAPS_BUILD=$CURRENT_DIR/map_build
 MAPS_OUT=$CURRENT_DIR
 
+mkdir -p $CURRENT_DIR/map_build
 chmod 0777 $MAPS_BUILD
+rm -f $CURRENT_DIR/map_build/generation.log
 
-DOCKER_IMAGE=danvyr/organicmap:latest
+
 CONTAINER_NAME=organicmap_mapgenerator
 docker rm  $CONTAINER_NAME
 
-
+DOCKER_IMAGE=danvyr/organicmap:latest
 MAP_URL="http://download.geofabrik.de/europe/belarus-latest.osm.pbf"
-
 COUNTRIES="Belarus_Brest*"
 
 docker run  -t -i \
