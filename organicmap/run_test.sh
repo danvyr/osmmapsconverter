@@ -3,11 +3,11 @@
 
 CURRENT_DIR=$(pwd)
 MAPS_BUILD=$CURRENT_DIR/map_build
-MAPS_OUT=$CURRENT_DIR
+MAPS_OUT=$CURRENT_DIR/out
 
-mkdir -p $CURRENT_DIR/map_build
-chmod 0777 $MAPS_BUILD
-rm -f $CURRENT_DIR/map_build/generation.log
+mkdir -p $MAPS_BUILD $MAPS_OUT
+chmod 0777 $MAPS_BUILD $MAPS_OUT
+rm -f $MAPS_BUILD/generation.log
 
 
 CONTAINER_NAME=organicmap_mapgenerator
