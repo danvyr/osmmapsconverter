@@ -21,19 +21,29 @@
 
 <body>
     <h1>Ежедневные обновления OpenStreetMap карт Беларуси для Garmin</h1>
-    <p>
+    <p>Карты генерируются с помощью <a href="https://www.mkgmap.org.uk/">mkgmap</a> из данных OSM. Доступно несколько различных стилей разной степени (не)удобства.</p>
     <h2>Установка карт</h2>
-    <p> Скопировать <b>iso файл</b> в папку Garmin на устройстве </p>
-    <p>
-    <p>Вопросы и предложения в https://t.me/@ <b>danvyr</b> on gmail.com</p>
-    <p>
+    <p><b>Устройство Garmin (навигатор, часы):</b> Скопировать <b>img файл</b> в папку Garmin на устройстве.<br/>
+    <b>Basecamp:</b> Распаковать архив .gmap.tgz и скопировать папку (напр. "Belarus OpenStreetMap.by generic.gmap") в папку с картами BaseCamp (напр. C:\Users\user\AppData\Roaming\Garmin\Maps).</p>
+    <p><small>Вопросы и предложения в Telegram:<a href="https://t.me/@danvyr"><b>danvyr</b></a>, на почту <tt>danvyr on gmail.com</tt>, либо в Issues на странице проекта в GitHub<br/>
+    <b>GitHub:</b> <a href="https://github.com/danvyr/osmmapsconverter">https://github.com/danvyr/osmmapsconverter</a></small></p>
     <h2>Варианты карт</h2>
+    <p>Файлы с _ru в имени — русский язык названий объектов вместо того, что по умолчанию (для Беларуси — белорусский)</p>
     <table>
         <tr>
-            <th>map_generic</th>
-            <th>map_generic_new_ru</th>
+            <th>generic</th>
+            <th>generic_new</th>
             <th>rogal</th>
-            <th>map_stranger</th>
+            <th>stranger</th>
+        </tr>
+        <tr>
+            <td>"Дефолтный" стиль mkgmap, без каких-либо кастомизаций.</td>
+            <td>Стиль общего назначения для <a href="https://garmin.openstreetmap.nl">garmin.openstreetmap.nl</a>, основан на дефолтном mkgmap</td>
+            <td>Стиль польского проекта OSMapa.pl (ныне не существует)</td>
+            <td>Стиль авторства Максима Васильева из клуба "Велосотня", Кирово-Чепецк. От оригинального проекта остался только репозиторий: <a href="https://github.com/MaksVasilev/stranger-garmin">https://github.com/MaksVasilev/stranger-garmin</a>.
+                Стиль адаптирован для использования в велосипедных внедорожных поездках, добавлены важные для туристов объекты.<br/>
+                Для openstreetmap.by переработаны некоторые иконки POI для однообразия, устранено несколько ошибок.
+            </td>
         </tr>
         <tr>
             <td>
@@ -83,24 +93,49 @@
                 <a href="generic/1.jpg"><img src="generic/1_512.jpg" alt="generic"> </a>
                 <a href="generic/2.jpg"><img src="generic/2_512.jpg" alt="generic"> </a>
                 <a href="generic/3.jpg"><img src="generic/3_512.jpg" alt="generic"> </a>
-            </td>
-            <td>
-                <a href="generic_new/1.jpg"><img src="generic_new/1_512.jpg" alt="generic"> </a>
-                <a href="generic_new/2.jpg"><img src="generic_new/2_512.jpg" alt="generic"> </a>
-                <a href="generic_new/3.jpg"><img src="generic_new/3_512.jpg" alt="generic"> </a>
-                <a href="generic_new/4.jpg"><img src="generic_new/4_512.jpg" alt="generic"> </a>
+                <br/>
+                <a href="generic/basecamp-generic.png"><img src="generic/basecamp-generic.png" width="384px" title="BaseCamp generic"/></a>
+                <br/>
+                <a href="generic/basecamp-generic1.png"><img src="generic/basecamp-generic1.png" width="384px" title="BaseCamp generic"/></a>
+                <br/>
+                <a href="generic/basecamp-generic2.png"><img src="generic/basecamp-generic2.png" width="384px" title="BaseCamp generic"/></a>
 
             </td>
             <td>
-                <a href="rogal/1.jpg"><img src="rogal/1_512.jpg" alt="generic"> </a>
-                <a href="rogal/2.jpg"><img src="rogal/2_512.jpg" alt="generic"> </a>
-                <a href="rogal/3.jpg"><img src="rogal/3_512.jpg" alt="generic"> </a>
-                <a href="rogal/4.jpg"><img src="rogal/4_512.jpg" alt="generic"> </a>
+                <a href="generic_new/1.jpg"><img src="generic_new/1_512.jpg" alt="generic_new"> </a>
+                <a href="generic_new/2.jpg"><img src="generic_new/2_512.jpg" alt="generic_new"> </a>
+                <a href="generic_new/3.jpg"><img src="generic_new/3_512.jpg" alt="generic_new"> </a>
+                <a href="generic_new/4.jpg"><img src="generic_new/4_512.jpg" alt="generic_new"> </a>
+                <br/>
+                <a href="generic_new/basecamp-generic_new.png"><img src="generic_new/basecamp-generic_new.png" width="384px" title="BaseCamp generic new"/></a>
+                <br/>
+                <a href="generic_new/basecamp-generic_new1.png"><img src="generic_new/basecamp-generic_new1.png" width="384px" title="BaseCamp generic new"/></a>
+                <br/>
+                <a href="generic_new/basecamp-generic_new2.png"><img src="generic_new/basecamp-generic_new2.png" width="384px" title="BaseCamp generic new"/></a>
+
             </td>
             <td>
-                <a href="strager/1.jpg"><img src="strager/1_512.jpg" alt="generic"> </a>
-                <a href="strager/2.jpg"><img src="strager/2_512.jpg" alt="generic"> </a>
-                <a href="strager/3.jpg"><img src="strager/3_512.jpg" alt="generic"> </a>
+                <a href="rogal/1.jpg"><img src="rogal/1_512.jpg" alt="rogal"> </a>
+                <a href="rogal/2.jpg"><img src="rogal/2_512.jpg" alt="rogal"> </a>
+                <a href="rogal/3.jpg"><img src="rogal/3_512.jpg" alt="rogal"> </a>
+                <a href="rogal/4.jpg"><img src="rogal/4_512.jpg" alt="rogal"> </a>
+                <br/>
+                <a href="rogal/basecamp-rogal.png"><img src="rogal/basecamp-rogal.png" width="384px" title="BaseCamp rogal"/></a>
+                <br/>
+                <a href="rogal/basecamp-rogal1.png"><img src="rogal/basecamp-rogal1.png" width="384px" title="BaseCamp rogal"/></a>
+                <br/>
+                <a href="rogal/basecamp-rogal2.png"><img src="rogal/basecamp-rogal2.png" width="384px" title="BaseCamp rogal"/></a>
+            </td>
+            <td>
+                <a href="stranger/1.jpg"><img src="stranger/1_512.jpg" alt="stranger"> </a>
+                <a href="stranger/2.jpg"><img src="stranger/2_512.jpg" alt="stranger"> </a>
+                <a href="stranger/3.jpg"><img src="stranger/3_512.jpg" alt="stranger"> </a>
+                <br/>
+                <a href="stranger/basecamp-stranger.png"><img src="stranger/basecamp-stranger.png" width="384px" title="BaseCamp stranger"/></a>
+                <br/>
+                <a href="stranger/basecamp-stranger1.png"><img src="stranger/basecamp-stranger1.png" width="384px" title="BaseCamp stranger"/></a>
+                <br/>
+                <a href="stranger/basecamp-stranger2.png"><img src="stranger/basecamp-stranger2.png" width="384px" title="BaseCamp stranger"/></a>
             </td>
         </tr>
 
