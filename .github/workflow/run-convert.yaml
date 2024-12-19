@@ -1,0 +1,17 @@
+name: remote ssh command
+on:
+  schedule:
+    - cron: "15 6 * * *"   # <=== Change this value
+jobs:
+  convert:
+    name: Run osm map converter
+    runs-on: ubuntu-latest
+    steps:
+      - name: osmmapconvert.py
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.PORT }}
+          script: cd /home/osm/dev/osmmapsconverter/ && python3 osmMapCreator.py &>logs/log
