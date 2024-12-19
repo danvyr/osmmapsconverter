@@ -1,4 +1,5 @@
-name: remote ssh command
+name: Converting OSM data to maps for Garmin, OSMand, Organic Maps
+run-name: ${{ gitea.actor }} is testing 
 on:
   schedule:
     - cron: "15 6 * * *"   # <=== Change this value
