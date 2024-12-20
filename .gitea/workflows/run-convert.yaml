@@ -15,4 +15,4 @@ jobs:
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.PORT }}
-          script: cd /home/osm/dev/osmmapsconverter/ && python3 osmMapCreator.py &>logs/log
+          script: cd /home/osm/dev/osmmapsconverter/ && python3 osmMapCreator.py

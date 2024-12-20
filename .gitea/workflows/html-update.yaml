@@ -10,10 +10,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Copy html
-        uses: appleboy/ssh-action@v1.2.0
+        uses: https://github.com/appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.PORT }}
-          script: cd /home/osm/dev/osmmapsconverter/html && git pull && cp -r *  /var/www/maps
+          script: cd ${{ vars.REPO_FOLDER }}/html && git pull && cp -r *  ${{ vars.WWW_MAPS }} 
+      - run: echo "🍏 This job's status is ${{ job.status }}."
+
+
