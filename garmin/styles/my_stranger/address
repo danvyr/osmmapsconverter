@@ -18,6 +18,22 @@ mkgmap:country=RUS & mkgmap:region!=* & mkgmap:admin_level4=* { set mkgmap:regio
 mkgmap:country=RUS & mkgmap:city!=* & mkgmap:admin_level11=* { set mkgmap:city='${mkgmap:admin_level11}' }
 mkgmap:country=RUS & mkgmap:city!=* & mkgmap:admin_level6=* { set mkgmap:city='${mkgmap:admin_level6}' }
 
+# Belarus = BLR
+#
+# Admin levels:
+# 2 - краіна
+# 4 - вобласць
+# 6 - раён, ці горад абласнога падпарадкавання
+# 8 - сельсавет, горад раённага падпарадкавання
+# 9 - раён горада
+# 10 - іншыя населеныя пункты
+mkgmap:country=BLR & mkgmap:region!=* & mkgmap:admin_level4=* & mkgmap:admin_level6=* { set mkgmap:region='${mkgmap:admin_level4}, ${mkgmap:admin_level6}' }
+mkgmap:country=BLR & mkgmap:region!=* & mkgmap:admin_level4=* { set mkgmap:region='${mkgmap:admin_level4}' }
+mkgmap:country=BLR & mkgmap:city!=* & (place=city | place=town | place=village | place=hamlet | place=allotments) { set mkgmap:city='${name}'}
+mkgmap:country=BLR & mkgmap:city!=* & mkgmap:admin_level10=* { set mkgmap:city='${mkgmap:admin_level10}' }
+mkgmap:country=BLR & mkgmap:city!=* & mkgmap:admin_level6=* { set mkgmap:city='${mkgmap:admin_level6}' }
+
+
 # common rules for all the rest of countries
 mkgmap:region!=* & mkgmap:admin_level6=* { set mkgmap:region='${mkgmap:admin_level6}' } 
 mkgmap:region!=* & mkgmap:admin_level5=* { set mkgmap:region='${mkgmap:admin_level5}' } 

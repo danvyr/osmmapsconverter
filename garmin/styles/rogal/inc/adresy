@@ -4,6 +4,21 @@ mkgmap:country!=* & mkgmap:admin_level2=* { set mkgmap:country='${mkgmap:admin_l
 mkgmap:country!=* & addr:country=* { set mkgmap:country='${addr:country}' }
 mkgmap:country!=* & is_in:country=* { set mkgmap:country='${is_in:country}' }
 
+# Belarus = BLR
+#
+# Admin levels:
+# 2 - краіна
+# 4 - вобласць
+# 6 - раён, ці горад абласнога падпарадкавання
+# 8 - сельсавет, горад раённага падпарадкавання
+# 9 - раён горада
+# 10 - іншыя населеныя пункты
+mkgmap:country=BLR & mkgmap:region!=* & mkgmap:admin_level4=* & mkgmap:admin_level6=* { set mkgmap:region='${mkgmap:admin_level4}, ${mkgmap:admin_level6}' }
+mkgmap:country=BLR & mkgmap:region!=* & mkgmap:admin_level4=* { set mkgmap:region='${mkgmap:admin_level4}' }
+mkgmap:country=BLR & mkgmap:city!=* & (place=city | place=town | place=village | place=hamlet | place=allotments) { set mkgmap:city='${name}'}
+mkgmap:country=BLR & mkgmap:city!=* & mkgmap:admin_level10=* { set mkgmap:city='${mkgmap:admin_level10}' }
+mkgmap:country=BLR & mkgmap:city!=* & mkgmap:admin_level6=* { set mkgmap:city='${mkgmap:admin_level6}' }
+
 
 #Poziom podziału administracyjnego, ustalony drogą konsensusu. Dla Polski:
 #2 – granica państwa
