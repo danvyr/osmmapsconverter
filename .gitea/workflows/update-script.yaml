@@ -14,7 +14,7 @@ jobs:
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.PORT }}
-          script: cd ${{ vars.REPO_FOLDER }}/html && git pull }} 
+          script: cd ${{ vars.REPO_FOLDER }}/html && git pull
       - run: echo "🍏 This job's status is ${{ job.status }}."
 
 
