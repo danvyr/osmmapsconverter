@@ -539,13 +539,19 @@ def garmin():
     moveGarmin()
 
 def convertRus():
-    log('Convert rus')
+    log('[INFO] Convert to rus')
     for map_name, url_to_map in urls['maps'].items():
         log(map_name)
         pathToFile = os.path.join(inputDir, map_name + '.osm.pbf')
         pathToRuFile = os.path.join(inputDir, map_name + '-ru.osm.pbf')
-        os.system('python3 rus/osm_back.py -l ru -o ' + pathToRuFile + ' ' + pathToFile)
+        try:
+            os.system('python3 rus/osm_back.py -l ru -o ' + pathToRuFile + ' ' + pathToFile)
+
+            log('[INFO] Successful  converting rus')
+        except:
+            log('[INFO] Error in converting  rus')
     log('END convert rus')
+    return 0
 
 
 

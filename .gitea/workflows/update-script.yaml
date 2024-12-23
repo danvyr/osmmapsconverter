@@ -1,0 +1,20 @@
+name: update html
+on:
+  push:
+    branches: ['master']
+jobs:
+  convert:
+    name: Run osm map converter
+    runs-on: ubuntu-latest
+    steps:
+      - name: Copy html
+        uses: https://github.com/appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.PORT }}
+          script: cd ${{ vars.REPO_FOLDER }}/html && git pull }} 
+      - run: echo "🍏 This job's status is ${{ job.status }}."
+
+
