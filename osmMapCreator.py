@@ -18,8 +18,10 @@ import glob
 import datetime
 import email.utils as eut
 import multiprocessing
+import subprocess
 from datetime import datetime, date, time
 from multiprocessing import Pool
+
 # from multiprocessing.dummy import Pool as ThreadPool
 
 from multiprocessing import cpu_count
@@ -545,12 +547,12 @@ def convertRus():
         pathToFile = os.path.join(inputDir, map_name + '.osm.pbf')
         pathToRuFile = os.path.join(inputDir, map_name + '-ru.osm.pbf')
         try:
-            os.system('python3 rus/osm_back.py -l ru -o ' + pathToRuFile + ' ' + pathToFile)
-
-            log('[INFO] Successful  converting rus')
-        except:
+            subprocess.run(['python3 rus/osm_back.py -l ru -o ' + pathToRuFile + ' ' + pathToFile],
+                           check= True)
+        except subprocess.CalledProcessError:
             log('[INFO] Error in converting  rus')
-    log('END convert rus')
+            return 1
+        log('[INFO] Successful  converting rus')
     return 0
 
 
@@ -558,9 +560,9 @@ def convertRus():
 
 def main():
  #   prepare():
-    log('Started')
+    log('[INFO] Started')
     dl = checkURL()
-    log ('Check version = '+ dl)
+    log ('[INFO] Check version = '+ dl)
     checkVersion(dl)
     if (readStatus() == 'finished'):
         if checkVersion(dl):
@@ -583,11 +585,11 @@ def main():
             clean()
             writeStatus('finished')
         else:
-            log('Can\'t start - updated')
+            log('[INFO] Can\'t start - updated')
 
     else:
-        log('Can\'t start - check status file')
-    log('Finished')
+        log('[INFO] Can\'t start - check status file')
+    log('[INFO] Finished')
 
 
 if __name__ == '__main__':
