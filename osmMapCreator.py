@@ -3,7 +3,6 @@
 # TODO формировать json и xml(osm_downloader format) с датой создания файлов и путями скачивания
 
 # TODO доставание полигонов из osm для любой страны (по админ уровню) или использование полигонов organicmap
-# TODO сделать тестовую замену name на name:be
 # TODO общий in, для разных приложения, с датой скачивания
 # TODO раскидать по модулям ?
 
@@ -547,8 +546,8 @@ def convertRus():
         pathToFile = os.path.join(inputDir, map_name + '.osm.pbf')
         pathToRuFile = os.path.join(inputDir, map_name + '-ru.osm.pbf')
         try:
-            subprocess.run(['python3 rus/osm_back.py -l ru -o ' + pathToRuFile + ' ' + pathToFile],
-                           check= True)
+            subprocess.run(['docker run -it --rm -v ' + currentDir + ':/app/ osm_back python3  ' + currentDir + '/rus/osm_back.py -l ru -o ' + pathToRuFile + ' ' + pathToFile],
+                           check= True, shell=True)
         except subprocess.CalledProcessError:
             log('[INFO] Error in converting  rus')
             return 1
