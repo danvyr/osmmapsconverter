@@ -7,6 +7,7 @@
 # TODO раскидать по модулям ?
 
 
+import docker
 import logging
 import sys
 import requests
@@ -324,19 +325,19 @@ def moveOrganicmaps():
     return organicmapsCount
 
 
-def moveOsmand():
-    osmandCount = 0
-    global moveCount
-    # move OsmAnd maps
-    log('move OsmAND map')
-    for file in os.listdir(osmandDir):
-        if file.endswith('.obf'):
-            log(file)
-            shutil.move(os.path.join(osmandDir, file),
-                        os.path.join(outOsmAnd, file))
-            osmandCount = osmandCount + 1
-    moveCount = moveCount + osmandCount
-    return osmandCount
+# def moveOsmand():
+#     osmandCount = 0
+#     global moveCount
+#     # move OsmAnd maps
+#     log('move OsmAND map')
+#     for file in os.listdir(osmandDir):
+#         if file.endswith('.obf'):
+#             log(file)
+#             shutil.move(os.path.join(osmandDir, file),
+#                         os.path.join(outOsmAnd, file))
+#             osmandCount = osmandCount + 1
+#     moveCount = moveCount + osmandCount
+#     return osmandCount
 
 
 def moveGarmin():
@@ -444,28 +445,22 @@ def osmand():
         os.chdir(osmandDir)
         for mapFile in os.listdir(splitDir):
             mapFile = os.path.join(splitDir, mapFile)
-            log(mapFile)
+            log("[INFO] Converting " + mapFile)
+            client = docker.from_env()
+            client.containers.run("danvyr/osmandmapcreator", 
+                                  environment=["PBF_FILE=" + mapFile , "JAVA_OPT="+javaOpt ],
+                                  volumes={splitDir: {'bind': '/in', 'mode': 'ro'},
+                                    outOsmAnd: {'bind': '/out', 'mode': 'rw'}})
 
-            cmd = 'java -Djava.util.logging.config.file="'+OAMCDir+'/logging.properties"' + javaOpt + '-cp "'+OAMCDir+'/OsmAndMapCreator.jar:'+OAMCDir+'/lib/*.jar" net.osmand.MainUtilities generate-obf ' \
-                + '"' + mapFile + '"'
-            log(cmd)
-            os.system(cmd)
-
-        log('Finish OSMAND map Creator')
-
+        log('[INFO] Finish OSMAND map Creator')
         os.chdir(currentDir)
-        moveOsmand()
-        return 1
 
     except OSError as err:
-        log("OS error: {0}".format(err))
-        return 0
+        log("[INFO] OS error: {0}".format(err))
     except ValueError:
-        log("Could not convert data to an integer.")
-        return 0
+        log("[INFO] Could not convert data to an integer.")
     except:
-        log("Unexpected error:"+ sys.exc_info()[0])
-        return 0
+        log("[INFO] Unexpected error:"+ sys.exc_info()[0])
 
 def organicmaps():
     print("[INFO] organicmaps")
@@ -575,7 +570,7 @@ def main():
                 if split():
                     osmand()
                 garmin()
-            organicmaps()
+            # organicmaps()
             if(moveCount > 1):
                 writeVersion(dl)
                 log('Something done')
