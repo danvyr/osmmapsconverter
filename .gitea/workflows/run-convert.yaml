@@ -2,7 +2,7 @@ name: Converting OSM data to maps for Garmin, OSMand, Organic Maps
 run-name: ${{ gitea.actor }} is testing 
 on:
   schedule:
-    - cron: "15 6 * * *"   # <=== Change this value
+    - cron: "15 6 * * *"
 jobs:
   convert:
     name: Run osm map converter
@@ -15,4 +15,4 @@ jobs:
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.PORT }}
-          script: cd /home/osm/dev/osmmapsconverter/ && python3 osmMapCreator.py
+          script: "cd /home/osm/dev/osmmapsconverter/ && python3 osmMapCreator.py"

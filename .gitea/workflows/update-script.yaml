@@ -7,7 +7,7 @@ jobs:
     name: Run osm map converter
     runs-on: ubuntu-latest
     steps:
-      - name: Copy html
+      - name: Git pull new version
         uses: https://github.com/appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.HOST }}
