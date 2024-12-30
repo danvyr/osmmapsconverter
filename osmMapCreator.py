@@ -443,15 +443,18 @@ def osmand():
     log('Start OSMAND map Creator')
     try:
         os.chdir(osmandDir)
+        client = docker.from_env()
         for mapFile in os.listdir(splitDir):
             mapFile = os.path.join(splitDir, mapFile)
             log("[INFO] Converting " + mapFile)
-            client = docker.from_env()
+
+            container_name="osmand_"+mapFile
             client.containers.run("danvyr/osmandmapcreator", 
                                   environment=["PBF_FILE=" + mapFile , "JAVA_OPT="+javaOpt ],
                                   volumes={splitDir: {'bind': '/in', 'mode': 'ro'},
-                                    outOsmAnd: {'bind': '/out', 'mode': 'rw'}})
-
+                                    outOsmAnd: {'bind': '/out', 'mode': 'rw'}},
+                                    name=container_name)
+        client = docker.prune(container_name)
         log('[INFO] Finish OSMAND map Creator')
         os.chdir(currentDir)
 
@@ -536,17 +539,20 @@ def garmin():
 
 def convertRus():
     log('[INFO] Convert to rus')
+    client = docker.from_env()
     for map_name, url_to_map in urls['maps'].items():
-        log(map_name)
-        try:
-            client = docker.from_env()
+        log(map_name)        
+        try:            
             client.containers.run("danvyr/osm_back", 
                                   environment=["PBF_FILE=" +  map_name + + '.osm.pbf', 
                                                "PBF_FILE_RU="+ map_name + '-ru.osm.pbf' ],
-                                  volumes={pbfDir: {'bind': '/in', 'mode': 'ro'}})
+                                  volumes={pbfDir: {'bind': '/in', 'mode': 'ro'}},
+                                  name="osm_back")
         except:
             log('[INFO] Error in converting  rus')
+            client = docker.prune("osm_back")
         log('[INFO] Successful  converting rus')
+        client = docker.prune("osm_back")
 
 
 
