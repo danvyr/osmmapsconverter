@@ -1,12 +1,18 @@
-# This is container for script for change "default language" in PBF files from Belarusian to russian
+### This is container for script that changing "default language" in PBF files from Belarusian to russian
 
 Script for changing tags: https://github.com/tbicr/osm-name-migrate/blob/main/osm_back.py
 
 Docker file and bash script for container https://github.com/danvyr/osmmapsconverter/tree/master/rus
 
-Volume: PBF_DIR   - folder with files
+Volume:
 
-Options: PBF_FILE PBF_FILE_RU  
+PBF_DIR - folder with files
+
+Options:
+
+PBF_FILE - original file
+
+PBF_FILE_RU  - file with russinan in name tag
 
 
 Example how it work:
