@@ -101,7 +101,7 @@ currentDir = os.path.abspath('.')
 currentMap = os.path.join(currentDir, 'currentMap.txt')
 currentStatus = os.path.join(currentDir, 'status.txt')
 
-inputDir = os.path.abspath('/var/www/maps/pbf')
+pbfDir = os.path.abspath('/var/www/maps/pbf')
 
 polyDir = os.path.abspath('poly')
 splitDir = os.path.abspath('split')
@@ -391,7 +391,7 @@ def download():
     try:
         for map_name, url_to_map in urls['maps'].items():
             log(map_name)
-            pathToFile = os.path.join(inputDir, map_name + '.osm.pbf')
+            pathToFile = os.path.join(pbfDir, map_name + '.osm.pbf')
             log(pathToFile)
             if urllib.request.urlretrieve(url_to_map,  pathToFile):
                 log('all downloaded')
@@ -412,11 +412,11 @@ def split():
     try:
         cmds = []
         for map_name, url_to_map in urls['maps'].items():
-            mapFile = os.path.join(inputDir, map_name + '.osm.pbf')
+            mapFile = os.path.join(pbfDir, map_name + '.osm.pbf')
             log(mapFile)
             for polyFile in os.listdir(polyDir):
                 log(polyFile)
-                cmd = 'osmconvert ' + os.path.join(inputDir, mapFile) + ' -B=' + '"' + os.path.join(polyDir, polyFile) + '"' \
+                cmd = 'osmconvert ' + os.path.join(pbfDir, mapFile) + ' -B=' + '"' + os.path.join(polyDir, polyFile) + '"' \
                     + ' --complete-ways --complex-ways -o='  \
                     + '"' + os.path.join(splitDir, polyFile.replace('poly', 'pbf')) + '"'   \
                     + ' --statistics'
@@ -527,7 +527,7 @@ def garmin():
     log('Start GARMIN map Creator')
     os.chdir(garminDir)
     for map_name, url_to_map in urls['maps'].items():
-        mapFile = os.path.join(inputDir, map_name + '.osm.pbf')
+        mapFile = os.path.join(pbfDir, map_name + '.osm.pbf')
         os.system('bash build.sh ' + mapFile)
     os.chdir(currentDir)
     log('Finish GARMIN map Creator')
@@ -538,17 +538,15 @@ def convertRus():
     log('[INFO] Convert to rus')
     for map_name, url_to_map in urls['maps'].items():
         log(map_name)
-        pathToFile = os.path.join(inputDir, map_name + '.osm.pbf')
-        pathToRuFile = os.path.join(inputDir, map_name + '-ru.osm.pbf')
         try:
-            subprocess.run(['docker run -it --rm -v ' + currentDir + ':/app/ osm_back python3  ' + currentDir + '/rus/osm_back.py -l ru -o ' + pathToRuFile + ' ' + pathToFile],
-                           check= True, shell=True)
-        except subprocess.CalledProcessError:
+            client = docker.from_env()
+            client.containers.run("danvyr/osm_back", 
+                                  environment=["PBF_FILE=" +  map_name + + '.osm.pbf', 
+                                               "PBF_FILE_RU="+ map_name + '-ru.osm.pbf' ],
+                                  volumes={pbfDir: {'bind': '/in', 'mode': 'ro'}})
+        except:
             log('[INFO] Error in converting  rus')
-            return 1
         log('[INFO] Successful  converting rus')
-    return 0
-
 
 
 
