@@ -3,8 +3,6 @@
 # TODO формировать json и xml(osm_downloader format) с датой создания файлов и путями скачивания
 
 # TODO доставание полигонов из osm для любой страны (по админ уровню) или использование полигонов organicmap
-# TODO общий in, для разных приложения, с датой скачивания
-# TODO раскидать по модулям ?
 
 
 import docker
@@ -393,7 +391,8 @@ def download():
             log(map_name)
             pathToFile = os.path.join(pbfDir, map_name + '.osm.pbf')
             log(pathToFile)
-            if urllib.request.urlretrieve(url_to_map,  pathToFile):
+            if urllib.request.urlretrieve(url_to_map,  pathToFile) \
+                and urllib.request.urlretrieve(url_to_map + ".md5",  pathToFile + ".md5"):
                 log('all downloaded')
                 return 1
             else:
@@ -449,12 +448,12 @@ def osmand():
             log("[INFO] Converting " + mapFile)
 
             container_name="osmand_"+mapFile
-            client.containers.run("danvyr/osmandmapcreator", 
+            container=client.containers.run("danvyr/osmandmapcreator",
                                   environment=["PBF_FILE=" + mapFile , "JAVA_OPT="+javaOpt ],
                                   volumes={splitDir: {'bind': '/in', 'mode': 'ro'},
                                     outOsmAnd: {'bind': '/out', 'mode': 'rw'}},
-                                    name=container_name)
-        client = docker.prune(container_name)
+                                    name=container_name, stdout=True, stderr=True)
+            container.remove()
         log('[INFO] Finish OSMAND map Creator')
         os.chdir(currentDir)
 
@@ -541,18 +540,20 @@ def convertRus():
     log('[INFO] Convert to rus')
     client = docker.from_env()
     for map_name, url_to_map in urls['maps'].items():
-        log(map_name)        
-        try:            
-            client.containers.run("danvyr/osm_back", 
-                                  environment=["PBF_FILE=" +  map_name + + '.osm.pbf', 
-                                               "PBF_FILE_RU="+ map_name + '-ru.osm.pbf' ],
-                                  volumes={pbfDir: {'bind': '/in', 'mode': 'ro'}},
-                                  name="osm_back")
+        log(map_name)
+        container = client.containers.create("danvyr/osm_back",
+                                environment=["PBF_FILE=" +  map_name + '.osm.pbf',
+                                            "PBF_FILE_RU="+ map_name + '-ru.osm.pbf' ],
+                                volumes={pbfDir: {'bind': '/pbf', 'mode': 'rw'}},
+                                name="osm_back")
+        try:
+            container.run( stdout=True, stderr=True)
+            container.remove()
         except:
+            container.remove()
             log('[INFO] Error in converting  rus')
-            client = docker.prune("osm_back")
         log('[INFO] Successful  converting rus')
-        client = docker.prune("osm_back")
+        # client.prune("osm_back")
 
 
 
@@ -570,7 +571,7 @@ def main():
             writeStatus('running')
             if(download()):
                 log('downloaded')
-                convertRus()
+                # convertRus()
                 if split():
                     osmand()
                 garmin()
